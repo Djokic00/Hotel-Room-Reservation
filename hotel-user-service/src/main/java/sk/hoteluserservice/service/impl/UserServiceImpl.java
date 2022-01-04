@@ -94,4 +94,21 @@ public class UserServiceImpl implements UserService {
         //Generate token
         return new TokenResponseDto(tokenService.generate(claims));
     }
+
+    @Override
+    public ClientDto update(Long id, ClientCreateDto clientCreateDto) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Client with id: %d not found.", id)));
+        //Set values to product
+        client.setUsername(clientCreateDto.getUsername());
+        client.setEmail(clientCreateDto.getEmail());
+        client.setFirstName(clientCreateDto.getFirstName());
+        client.setLastName(clientCreateDto.getLastName());
+        client.setPassword(clientCreateDto.getPassword());
+        client.setPassportNumber(clientCreateDto.getPassportNumber());
+        client.setContact(clientCreateDto.getContact());
+        //Map product to DTO and return it
+        return userMapper.clientToClientDto(userRepository.save(client));
+    }
+
 }

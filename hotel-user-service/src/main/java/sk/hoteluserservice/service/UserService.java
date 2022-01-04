@@ -16,5 +16,6 @@ public interface UserService {
     void registerClient(ClientCreateDto clientCreateDto);
 
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
+    ClientDto update(Long id, ClientCreateDto clientCreateDto);
 
 }

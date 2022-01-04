@@ -76,10 +76,16 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @ApiOperation(value = "Login")
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> loginUser(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
         return new ResponseEntity<>(userService.login(tokenRequestDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Client Update")
+    @PostMapping("/{id}")
+    public ResponseEntity<ClientDto> update(@PathVariable("id") Long id,
+                                            @RequestBody @Valid ClientCreateDto clientCreateDto) {
+        return new ResponseEntity<>(userService.update(id, clientCreateDto), HttpStatus.OK);
     }
 }

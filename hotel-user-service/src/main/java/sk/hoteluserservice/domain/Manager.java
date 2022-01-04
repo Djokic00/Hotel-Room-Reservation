@@ -5,12 +5,12 @@ import java.sql.Date;
 
 
 @Entity
-public class Manager extends User{
+public class Manager extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String hotelname;
+    private String hotelName;
 //    private Date hiringDate;
 
     @Override
@@ -23,12 +23,12 @@ public class Manager extends User{
         this.id = id;
     }
 
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
 //    public Date getHiringDate() {

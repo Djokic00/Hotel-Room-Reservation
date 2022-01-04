@@ -29,7 +29,7 @@ public class UserMapper {
         return userDto;
     }
 
-    public ClientDto clientToClientDto(Client client){
+    public ClientDto clientToClientDto(Client client) {
         ClientDto clientDto = new ClientDto();
        // clientDto.setBirthday(client.getBirthday());
         clientDto.setContact(client.getContact());
@@ -68,7 +68,7 @@ public class UserMapper {
         manager.setPassword(managerCreateDto.getPassword());
        // manager.setBirthday(managerCreateDto.getBirthday());
         manager.setContact(managerCreateDto.getContact());
-        manager.setHotelname(managerCreateDto.getHotelname());
+        manager.setHotelName(managerCreateDto.getHotelname());
 //        manager.setHiringDate(managerCreateDto.getHiringDate());
         manager.setRole(roleRepository.findRoleByName("ROLE_MANAGER").get());
 

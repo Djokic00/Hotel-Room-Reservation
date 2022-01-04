@@ -3,13 +3,13 @@ package sk.hoteluserservice.domain;
 import javax.persistence.*;
 
 @Entity
-public class Client extends User{
+public class Client extends User {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-        private Integer passportNumber;
-        private Integer numberOfReservations;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Integer passportNumber;
+    private Integer numberOfReservations;
 
     @Override
     public Long getId() {
