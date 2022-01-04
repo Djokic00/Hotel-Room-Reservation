@@ -2,8 +2,10 @@ package sk.hoteluserservice.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sk.hoteluserservice.domain.Client;
@@ -11,6 +13,7 @@ import sk.hoteluserservice.domain.Manager;
 import sk.hoteluserservice.domain.User;
 import sk.hoteluserservice.dto.*;
 import sk.hoteluserservice.exception.NotFoundException;
+import sk.hoteluserservice.listener.helper.MessageHelper;
 import sk.hoteluserservice.mapper.UserMapper;
 import sk.hoteluserservice.repository.ClientRepository;
 import sk.hoteluserservice.repository.ManagerRepository;
@@ -28,6 +31,9 @@ public class UserServiceImpl implements UserService {
     private TokenService tokenService;
     private ClientRepository clientRepository;
     private ManagerRepository managerRepository;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
+    private String clientRegisterDestination;
 
 //    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService) {
 //        this.userRepository = userRepository;
@@ -36,12 +42,16 @@ public class UserServiceImpl implements UserService {
 //    }
 
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService, ClientRepository clientRepository, ManagerRepository managerRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService,
+                           ClientRepository clientRepository, ManagerRepository managerRepository,
+                           JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
         this.clientRepository = clientRepository;
         this.managerRepository = managerRepository;
+        this.jmsTemplate = jmsTemplate;
+        this.clientRegisterDestination = clientRegisterDestination;
     }
 
     @Override
@@ -62,6 +72,11 @@ public class UserServiceImpl implements UserService {
         Client client = userMapper.clientCreateDtoToClient(clientCreateDto);
         userRepository.save(client);
         return userMapper.userToUserDto(client);
+    }
+
+    @Override
+    public void registerClient(ClientCreateDto clientCreateDto) {
+        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(clientCreateDto));
     }
 
     @Override

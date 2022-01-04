@@ -13,6 +13,8 @@ public interface UserService {
     UserDto addManager(ManagerCreateDto managerCreateDto);
     UserDto addClient(ClientCreateDto clientCreateDto);
 
+    void registerClient(ClientCreateDto clientCreateDto);
+
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 
 }

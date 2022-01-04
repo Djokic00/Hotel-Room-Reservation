@@ -4,12 +4,15 @@ package sk.hoteluserservice.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import sk.hoteluserservice.dto.*;
+import sk.hoteluserservice.listener.helper.MessageHelper;
 import sk.hoteluserservice.security.CheckSecurity;
 import sk.hoteluserservice.service.UserService;
 
@@ -21,9 +24,21 @@ public class UserController {
 
 
     private UserService userService;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
+    private String clientRegisterDestination;
+//
+//    public UserController(UserService userService) {
+//        this.userService = userService;
+//    }
 
-    public UserController(UserService userService) {
+
+    public UserController(UserService userService, JmsTemplate jmsTemplate, MessageHelper messageHelper,
+                          @Value("${destination.registerClient}") String clientRegisterDestination) {
         this.userService = userService;
+        this.jmsTemplate = jmsTemplate;
+        this.messageHelper = messageHelper;
+        this.clientRegisterDestination = clientRegisterDestination;
     }
 
     @ApiOperation(value = "Get all users")
@@ -53,6 +68,12 @@ public class UserController {
     @PostMapping("/registration/manager")
     public ResponseEntity<UserDto> saveManager(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
         return new ResponseEntity<>(userService.addManager(managerCreateDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/registration/activemq")
+    public ResponseEntity<Void> registerClient(@RequestBody @Valid ClientCreateDto clientCreateDto) {
+        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(new ClientCreateDto()));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
