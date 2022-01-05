@@ -111,4 +111,18 @@ public class UserServiceImpl implements UserService {
         return userMapper.clientToClientDto(userRepository.save(client));
     }
 
+    @Override
+    public ClientDto updatePass(Long id, PasswordClientDto passwordClientDto) {
+
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Client with id: %d not found.", id)));
+        //Set values to product
+
+        client.setPassword(passwordClientDto.getPassword());
+
+        //Map product to DTO and return it
+        return userMapper.clientToClientDto(userRepository.save(client));
+
+    }
+
 }

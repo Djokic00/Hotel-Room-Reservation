@@ -88,4 +88,12 @@ public class UserController {
                                             @RequestBody @Valid ClientCreateDto clientCreateDto) {
         return new ResponseEntity<>(userService.update(id, clientCreateDto), HttpStatus.OK);
     }
+
+
+    @ApiOperation(value = "Client Password Update")
+    @PostMapping("/{id}/password")
+    public ResponseEntity<ClientDto> updatePassword(@PathVariable("id") Long id,
+                                            @RequestBody @Valid PasswordClientDto passwordClientDto) {
+        return new ResponseEntity<>(userService.updatePass(id, passwordClientDto), HttpStatus.OK);
+    }
 }
