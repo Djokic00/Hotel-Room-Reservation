@@ -7,6 +7,7 @@ public class UserDto{
     private String firstName;
     private String lastName;
     private String username;
+    private Boolean isBanned;
 
     public Long getId() {
         return id;
@@ -46,5 +47,13 @@ public class UserDto{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Boolean getBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(Boolean banned) {
+        isBanned = banned;
     }
 }

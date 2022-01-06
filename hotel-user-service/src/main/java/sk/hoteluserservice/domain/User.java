@@ -18,6 +18,7 @@ public class User {
     private String lastName;
   //  private Date birthday;
     private Integer contact;
+    private Boolean isBanned;
 
     @ManyToOne(optional = false)
     private Role role;
@@ -92,5 +93,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(Boolean banned) {
+        isBanned = banned;
     }
 }

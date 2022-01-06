@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto addManager(ManagerCreateDto managerCreateDto) {
         Manager manager = userMapper.managerCreateDtoToManager(managerCreateDto);
+        manager.setBanned(false);
         userRepository.save(manager);
         return userMapper.userToUserDto(manager);
     }
@@ -70,6 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto addClient(ClientCreateDto clientCreateDto) {
         Client client = userMapper.clientCreateDtoToClient(clientCreateDto);
+        client.setBanned(false);
         userRepository.save(client);
         return userMapper.userToUserDto(client);
     }
@@ -88,11 +90,15 @@ public class UserServiceImpl implements UserService {
                         .format("User with username: %s and password: %s not found.", tokenRequestDto.getUsername(),
                                 tokenRequestDto.getPassword())));
         //Create token payload
-        Claims claims = Jwts.claims();
-        claims.put("id", user.getId());
-        claims.put("role", user.getRole().getName());
-        //Generate token
-        return new TokenResponseDto(tokenService.generate(claims));
+        if (user.getBanned()==false) {
+            Claims claims = Jwts.claims();
+            claims.put("id", user.getId());
+            claims.put("role", user.getRole().getName());
+
+            //Generate token
+            return new TokenResponseDto(tokenService.generate(claims));
+        } else return new TokenResponseDto();
+
     }
 
     @Override
@@ -123,6 +129,33 @@ public class UserServiceImpl implements UserService {
         //Map product to DTO and return it
         return userMapper.clientToClientDto(userRepository.save(client));
 
+    }
+
+    @Override
+    public UserDto banUser(Long id, BanUserDto banUserDto) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: %d not found.", id)));
+        //Set values to product
+
+        user.setBanned(true);
+
+        //Map product to DTO and return it
+        return userMapper.userToUserDto(userRepository.save(user));
+
+    }
+
+    @Override
+    public UserDto unbanUser(Long id, BanUserDto banUserDto) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: %d not found.", id)));
+        //Set values to product
+
+        user.setBanned(false);
+
+        //Map product to DTO and return it
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
 }

@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
+import sk.hoteluserservice.domain.Client;
 import sk.hoteluserservice.dto.*;
 import sk.hoteluserservice.listener.helper.MessageHelper;
+import sk.hoteluserservice.mapper.UserMapper;
 import sk.hoteluserservice.security.CheckSecurity;
 import sk.hoteluserservice.service.UserService;
 
@@ -27,6 +29,7 @@ public class UserController {
     private JmsTemplate jmsTemplate;
     private MessageHelper messageHelper;
     private String clientRegisterDestination;
+    private UserMapper userMapper;
 //
 //    public UserController(UserService userService) {
 //        this.userService = userService;
@@ -34,11 +37,13 @@ public class UserController {
 
 
     public UserController(UserService userService, JmsTemplate jmsTemplate, MessageHelper messageHelper,
-                          @Value("${destination.registerClient}") String clientRegisterDestination) {
+                          @Value("${destination.registerClient}") String clientRegisterDestination,
+                          UserMapper userMapper) {
         this.userService = userService;
         this.jmsTemplate = jmsTemplate;
         this.messageHelper = messageHelper;
         this.clientRegisterDestination = clientRegisterDestination;
+        this.userMapper = userMapper;
     }
 
     @ApiOperation(value = "Get all users")
@@ -70,16 +75,24 @@ public class UserController {
         return new ResponseEntity<>(userService.addManager(managerCreateDto), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Register client with notification")
     @PostMapping("/registration/activemq")
     public ResponseEntity<Void> registerClient(@RequestBody @Valid ClientCreateDto clientCreateDto) {
-        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(new ClientCreateDto()));
+        Client client = userMapper.clientCreateDtoToClient(clientCreateDto);
+        ClientDto clientDto = userMapper.clientToClientDto(client);
+        userService.addClient(clientCreateDto);
+        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(clientDto));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(value = "Login")
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> loginUser(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
-        return new ResponseEntity<>(userService.login(tokenRequestDto), HttpStatus.OK);
+            TokenResponseDto token=userService.login(tokenRequestDto);
+            if (token.getToken()!=null) {
+                return new ResponseEntity<>(token, HttpStatus.OK);
+            }else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
     }
 
     @ApiOperation(value = "Client Update")
@@ -96,4 +109,22 @@ public class UserController {
                                             @RequestBody @Valid PasswordClientDto passwordClientDto) {
         return new ResponseEntity<>(userService.updatePass(id, passwordClientDto), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Ban user")
+    @PostMapping("/{id}/ban")
+   // @CheckSecurity(roles = {"ROLE_ADMIN"})
+      public ResponseEntity<UserDto> banUser(@PathVariable("id") Long id,
+                                                    @RequestBody @Valid BanUserDto banUserDto) {
+        return new ResponseEntity<>(userService.banUser(id, banUserDto), HttpStatus.OK);
+    }
+    @ApiOperation(value = "Unban user")
+    @PostMapping("/{id}/unban")
+    //@CheckSecurity(roles = {"ROLE_ADMIN"})
+    public ResponseEntity<UserDto> unbanUser(@PathVariable("id") Long id,
+                                           @RequestBody @Valid BanUserDto banUserDto) {
+        return new ResponseEntity<>(userService.unbanUser(id, banUserDto), HttpStatus.OK);
+    }
+
+
+
 }

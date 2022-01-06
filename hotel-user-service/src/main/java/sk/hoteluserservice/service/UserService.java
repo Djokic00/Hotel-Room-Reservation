@@ -18,5 +18,8 @@ public interface UserService {
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
     ClientDto update(Long id, ClientCreateDto clientCreateDto);
     ClientDto updatePass(Long id, PasswordClientDto passwordClientDto);
+    UserDto banUser(Long id, BanUserDto banUserDto);
+    UserDto unbanUser(Long id, BanUserDto banUserDto);
+
 
 }
