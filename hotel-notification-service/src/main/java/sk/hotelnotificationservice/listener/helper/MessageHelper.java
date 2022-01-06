@@ -25,8 +25,6 @@ public class MessageHelper {
         this.objectMapper = objectMapper;
     }
 
-    public MessageHelper() {
-    }
 
     public <T> T getMessage(Message message, Class<T> clazz) throws RuntimeException, JMSException {
         try {
