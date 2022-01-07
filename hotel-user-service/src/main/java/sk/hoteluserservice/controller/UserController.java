@@ -109,12 +109,27 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "Client Password Update")
+    @ApiOperation(value = "Password Update")
     @PostMapping("/{id}/password")
-    public ResponseEntity<ClientDto> updatePassword(@PathVariable("id") Long id,
-                                            @RequestBody @Valid PasswordClientDto passwordClientDto) {
-        return new ResponseEntity<>(userService.updatePass(id, passwordClientDto), HttpStatus.OK);
+    public ResponseEntity<UserDto> updatePassword(@PathVariable("id") Long id,
+                                            @RequestBody @Valid PasswordUserDto passwordClientDto) {
+        return new ResponseEntity<>(userService.updatePassword(id, passwordClientDto), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Client PassportNumber Update")
+    @PostMapping("/{id}/passport")
+    public ResponseEntity<ClientDto> updatePassportNumber(@PathVariable("id") Long id,
+                                                          @RequestBody @Valid PassportClientDto passportClientDto) {
+        return new ResponseEntity<>(userService.updatePassportNumber(id, passportClientDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Manager Hotel Name Update")
+    @PostMapping("/{id}/hotel")
+    public ResponseEntity<ManagerDto> updateHotelName(@PathVariable("id") Long id,
+                                                          @RequestBody @Valid HotelNameManagerDto hotelNameManagerDto) {
+        return new ResponseEntity<>(userService.updateHotelName(id, hotelNameManagerDto), HttpStatus.OK);
+    }
+
 
     @ApiOperation(value = "Ban user")
     @PostMapping("/{id}/ban")
@@ -131,11 +146,19 @@ public class UserController {
         return new ResponseEntity<>(userService.unbanUser(id, banUserDto), HttpStatus.OK);
     }
 
+
     @GetMapping("/regitrationConfirm")
     public String confirmRegistration(@RequestParam("token") String token) {
-        if (userService.verify(token)==true){
+        if (userService.verify(token) == true) {
             return "verified";
-        }else return "failed";
+        } else return "failed";
+    }
+
+    @ApiOperation(value = "Discount")
+    @GetMapping("/{id}/discount")
+    public ResponseEntity<DiscountDto> getDiscount(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(userService.findDiscount(id), HttpStatus.OK);
+
     }
 
 }

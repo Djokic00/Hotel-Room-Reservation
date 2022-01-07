@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 import sk.hoteluserservice.domain.Client;
 import sk.hoteluserservice.domain.Manager;
 import sk.hoteluserservice.domain.User;
-import sk.hoteluserservice.dto.ClientCreateDto;
-import sk.hoteluserservice.dto.ClientDto;
-import sk.hoteluserservice.dto.ManagerCreateDto;
-import sk.hoteluserservice.dto.UserDto;
+import sk.hoteluserservice.dto.*;
 import sk.hoteluserservice.repository.RoleRepository;
 
 @Component
@@ -63,8 +60,19 @@ public class UserMapper {
         client.setVerificationCode(randomCode);
         client.setEnabled(false);
 
-
         return client;
+    }
+
+    public ManagerDto managerToManagerDto(Manager manager) {
+        ManagerDto managerDto = new ManagerDto();
+        managerDto.setContact(manager.getContact());
+        managerDto.setEmail(manager.getEmail());
+        managerDto.setFirstName(manager.getFirstName());
+        managerDto.setUsername(manager.getUsername());
+        managerDto.setLastName(manager.getLastName());
+        managerDto.getHotelName(manager.getHotelName());
+
+        return managerDto;
     }
 
     public Manager managerCreateDtoToManager(ManagerCreateDto managerCreateDto) {
@@ -85,6 +93,7 @@ public class UserMapper {
 
         return manager;
     }
+
 
 
 }
