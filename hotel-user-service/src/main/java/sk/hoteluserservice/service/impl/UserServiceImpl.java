@@ -8,18 +8,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sk.hoteluserservice.domain.Client;
-import sk.hoteluserservice.domain.Manager;
-import sk.hoteluserservice.domain.User;
+import sk.hoteluserservice.domain.*;
 import sk.hoteluserservice.dto.*;
 import sk.hoteluserservice.exception.NotFoundException;
 import sk.hoteluserservice.listener.helper.MessageHelper;
 import sk.hoteluserservice.mapper.UserMapper;
 import sk.hoteluserservice.repository.ClientRepository;
+import sk.hoteluserservice.repository.ClientStatusRepository;
 import sk.hoteluserservice.repository.ManagerRepository;
 import sk.hoteluserservice.repository.UserRepository;
 import sk.hoteluserservice.security.service.TokenService;
 import sk.hoteluserservice.service.UserService;
+
+import java.util.List;
 
 
 @Service
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     private TokenService tokenService;
     private ClientRepository clientRepository;
+    private ClientStatusRepository clientStatusRepository;
     private ManagerRepository managerRepository;
     private JmsTemplate jmsTemplate;
     private MessageHelper messageHelper;
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService,
                            ClientRepository clientRepository, ManagerRepository managerRepository,
+                           ClientStatusRepository clientStatusRepository,
                            JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -52,6 +55,7 @@ public class UserServiceImpl implements UserService {
         this.managerRepository = managerRepository;
         this.jmsTemplate = jmsTemplate;
         this.clientRegisterDestination = clientRegisterDestination;
+        this.clientStatusRepository = clientStatusRepository;
     }
 
     @Override
@@ -117,19 +121,36 @@ public class UserServiceImpl implements UserService {
         return userMapper.clientToClientDto(userRepository.save(client));
     }
 
-    @Override
-    public ClientDto updatePass(Long id, PasswordClientDto passwordClientDto) {
-
+    public ClientDto updatePassportNumber(Long id, PassportClientDto passportClientDto) {
         Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Client with id: %d not found.", id)));
+        client.setPassportNumber(passportClientDto.getPassportNumber());
+
+        return userMapper.clientToClientDto(userRepository.save(client));
+    }
+
+    @Override
+    public UserDto updatePassword(Long id, PasswordUserDto passwordUserDto) {
+
+        User user = clientRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Client with id: %d not found.", id)));
         //Set values to product
 
-        client.setPassword(passwordClientDto.getPassword());
+        user.setPassword(passwordUserDto.getPassword());
 
         //Map product to DTO and return it
-        return userMapper.clientToClientDto(userRepository.save(client));
-
+        return userMapper.userToUserDto(userRepository.save(user));
     }
+
+    @Override
+    public ManagerDto updateHotelName(Long id, HotelNameManagerDto hotelNameManagerDto) {
+        Manager manager = managerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Client with id: %d not found.", id)));
+
+        manager.setHotelName(hotelNameManagerDto.getHotelName());
+        return userMapper.managerToManagerDto(userRepository.save(manager));
+    }
+
 
     @Override
     public UserDto banUser(Long id, BanUserDto banUserDto) {
@@ -156,6 +177,23 @@ public class UserServiceImpl implements UserService {
 
         //Map product to DTO and return it
         return userMapper.userToUserDto(userRepository.save(user));
+    }
+
+    @Override
+    public DiscountDto findDiscount(Long id) {
+        Client client = clientRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String
+                        .format("User with id: %d not found.", id)));
+        List<ClientStatus> clientStatusList = clientStatusRepository.findAll();
+        //get discount
+        ClientStatus status = clientStatusList.stream()
+                .filter(clientStatus -> clientStatus.getMaxNumberOfReservations() >= client.getNumberOfReservations()
+                        && clientStatus.getMinNumberOfReservations() <= client.getNumberOfReservations())
+                .findAny()
+                .get();
+
+        return new DiscountDto(status.getDiscount(), status.getRank());
     }
 
 }
