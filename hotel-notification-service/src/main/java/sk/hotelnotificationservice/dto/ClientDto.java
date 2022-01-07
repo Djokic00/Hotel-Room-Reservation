@@ -11,6 +11,8 @@ public class ClientDto {
     private Integer contact;
     private Integer passportNumber;
     private Integer numberOfReservations;
+    private String verificationCode;
+    private boolean enabled;
 
     public Long getId() {
         return id;
@@ -76,6 +78,22 @@ public class ClientDto {
 
     public void setNumberOfReservations(Integer numberOfReservations) {
         this.numberOfReservations = numberOfReservations;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

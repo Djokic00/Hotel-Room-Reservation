@@ -20,6 +20,7 @@ public interface UserService {
     ClientDto updatePass(Long id, PasswordClientDto passwordClientDto);
     UserDto banUser(Long id, BanUserDto banUserDto);
     UserDto unbanUser(Long id, BanUserDto banUserDto);
+    Boolean verify(String token);
 
 
 }

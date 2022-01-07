@@ -19,6 +19,10 @@ public class User {
   //  private Date birthday;
     private Integer contact;
     private Boolean isBanned;
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
+    private boolean enabled;
 
     @ManyToOne(optional = false)
     private Role role;
@@ -101,5 +105,21 @@ public class User {
 
     public void setBanned(Boolean banned) {
         isBanned = banned;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

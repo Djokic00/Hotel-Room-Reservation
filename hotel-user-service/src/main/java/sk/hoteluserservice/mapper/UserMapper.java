@@ -1,5 +1,6 @@
 package sk.hoteluserservice.mapper;
 
+import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Component;
 import sk.hoteluserservice.domain.Client;
 import sk.hoteluserservice.domain.Manager;
@@ -26,6 +27,7 @@ public class UserMapper {
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setUsername(user.getUsername());
+
         return userDto;
     }
 
@@ -39,6 +41,8 @@ public class UserMapper {
         clientDto.setLastName(client.getLastName());
         clientDto.setPassportNumber(client.getPassportNumber());
         clientDto.setNumberOfReservations(client.getNumberOfReservations());
+        clientDto.setEnabled(client.isEnabled());
+        clientDto.setVerificationCode(client.getVerificationCode());
 
         return clientDto;
     }
@@ -55,6 +59,10 @@ public class UserMapper {
         client.setPassportNumber(clientCreateDto.getPassportNumber());
         client.setRole(roleRepository.findRoleByName("ROLE_CLIENT").get());
         client.setNumberOfReservations(0);
+        String randomCode = RandomString.make(64);
+        client.setVerificationCode(randomCode);
+        client.setEnabled(false);
+
 
         return client;
     }
@@ -71,6 +79,9 @@ public class UserMapper {
         manager.setHotelName(managerCreateDto.getHotelname());
 //        manager.setHiringDate(managerCreateDto.getHiringDate());
         manager.setRole(roleRepository.findRoleByName("ROLE_MANAGER").get());
+        String randomCode = RandomString.make(64);
+        manager.setVerificationCode(randomCode);
+        manager.setEnabled(false);
 
         return manager;
     }

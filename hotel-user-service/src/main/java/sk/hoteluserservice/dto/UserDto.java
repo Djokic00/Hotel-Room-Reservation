@@ -8,6 +8,7 @@ public class UserDto{
     private String lastName;
     private String username;
     private Boolean isBanned;
+    private Boolean enabled;
 
     public Long getId() {
         return id;
@@ -55,5 +56,13 @@ public class UserDto{
 
     public void setBanned(Boolean banned) {
         isBanned = banned;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
                         .format("User with username: %s and password: %s not found.", tokenRequestDto.getUsername(),
                                 tokenRequestDto.getPassword())));
         //Create token payload
-        if (user.getBanned()==false) {
+        if (user.getBanned()==false && user.isEnabled()==true) {
             Claims claims = Jwts.claims();
             claims.put("id", user.getId());
             claims.put("role", user.getRole().getName());
@@ -157,5 +157,22 @@ public class UserServiceImpl implements UserService {
         //Map product to DTO and return it
         return userMapper.userToUserDto(userRepository.save(user));
     }
+
+    @Override
+    public Boolean verify(String token) {
+        User user = userRepository.findUserByVerificationCode(token)
+                .orElseThrow(() -> new NotFoundException("not found"));
+        //Set values to product
+
+        user.setEnabled(true);
+        user.setVerificationCode(null);
+
+        //Map product to DTO and return it
+        UserDto userDto = userMapper.userToUserDto(userRepository.save(user));
+        if(!userDto.equals(null)){
+        return true;
+        }else return false;
+    }
+
 
 }

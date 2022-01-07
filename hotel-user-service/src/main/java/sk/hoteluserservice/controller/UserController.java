@@ -12,13 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import sk.hoteluserservice.domain.Client;
+import sk.hoteluserservice.domain.User;
 import sk.hoteluserservice.dto.*;
+import sk.hoteluserservice.exception.NotFoundException;
 import sk.hoteluserservice.listener.helper.MessageHelper;
 import sk.hoteluserservice.mapper.UserMapper;
+import sk.hoteluserservice.repository.UserRepository;
 import sk.hoteluserservice.security.CheckSecurity;
 import sk.hoteluserservice.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -30,6 +34,7 @@ public class UserController {
     private MessageHelper messageHelper;
     private String clientRegisterDestination;
     private UserMapper userMapper;
+    private UserRepository userRepository;
 //
 //    public UserController(UserService userService) {
 //        this.userService = userService;
@@ -38,12 +43,13 @@ public class UserController {
 
     public UserController(UserService userService, JmsTemplate jmsTemplate, MessageHelper messageHelper,
                           @Value("${destination.registerClient}") String clientRegisterDestination,
-                          UserMapper userMapper) {
+                          UserMapper userMapper, UserRepository userRepository) {
         this.userService = userService;
         this.jmsTemplate = jmsTemplate;
         this.messageHelper = messageHelper;
         this.clientRegisterDestination = clientRegisterDestination;
         this.userMapper = userMapper;
+        this.userRepository=userRepository;
     }
 
     @ApiOperation(value = "Get all users")
@@ -125,6 +131,11 @@ public class UserController {
         return new ResponseEntity<>(userService.unbanUser(id, banUserDto), HttpStatus.OK);
     }
 
-
+    @GetMapping("/regitrationConfirm")
+    public String confirmRegistration(@RequestParam("token") String token) {
+        if (userService.verify(token)==true){
+            return "verified";
+        }else return "failed";
+    }
 
 }
