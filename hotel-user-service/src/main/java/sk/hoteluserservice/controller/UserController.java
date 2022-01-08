@@ -147,7 +147,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/regitrationConfirm")
+    @GetMapping("/registrationConfirm")
     public String confirmRegistration(@RequestParam("token") String token) {
         if (userService.verify(token) == true) {
             return "verified";
@@ -156,9 +156,22 @@ public class UserController {
 
     @ApiOperation(value = "Discount")
     @GetMapping("/{id}/discount")
-    public ResponseEntity<DiscountDto> getDiscount(@PathVariable("id") Long id) {
+    public ResponseEntity<ClientStatusDto> getDiscount(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.findDiscount(id), HttpStatus.OK);
+    }
 
+    @ApiOperation(value = "Discount Update")
+    @PostMapping("/{id}/discountUpdate")
+    public ResponseEntity<ClientStatusDto> updateDiscount(@PathVariable("id") Long id,
+                                                          @RequestBody @Valid DiscountCreateDto discountCreateDto) {
+        return new ResponseEntity<>(userService.updateDiscount(id, discountCreateDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Rank System Update")
+    @PostMapping("/{id}/updateRankingSystem")
+    public ResponseEntity<ClientStatusDto> updateRankingSystem(@PathVariable("id") Long id,
+                                                      @RequestBody @Valid ClientStatusCreateDto clientStatusCreateDto) {
+        return new ResponseEntity<>(userService.updateRankingSystem(id, clientStatusCreateDto), HttpStatus.OK);
     }
 
 }

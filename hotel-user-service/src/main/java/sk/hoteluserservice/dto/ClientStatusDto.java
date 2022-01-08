@@ -1,28 +1,29 @@
 package sk.hoteluserservice.dto;
 
-public class DiscountDto {
+public class ClientStatusDto {
     private String rank;
     private Integer discount;
 
-    public Integer getDiscount() {
-        return discount;
-    }
+    public ClientStatusDto() {}
 
-    public DiscountDto() {}
-
-    public DiscountDto(Integer discount, String rank) {
+    public ClientStatusDto(Integer discount, String rank) {
         this.discount = discount;
         this.rank = rank;
-    }
-
-    public void setDiscount(Integer discount) {
-        this.discount = discount;
     }
 
     public String getRank() {
         return rank;
     }
+
     public void setRank(String rank) {
         this.rank = rank;
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
     }
 }

@@ -22,7 +22,7 @@ public class User {
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
 
-    private boolean enabled;
+    private Boolean enabled;
 
     @ManyToOne(optional = false)
     private Role role;
@@ -119,7 +119,7 @@ public class User {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 }

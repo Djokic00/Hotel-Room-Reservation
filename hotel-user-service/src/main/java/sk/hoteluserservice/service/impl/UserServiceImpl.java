@@ -67,7 +67,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto addManager(ManagerCreateDto managerCreateDto) {
         Manager manager = userMapper.managerCreateDtoToManager(managerCreateDto);
-        manager.setBanned(false);
         userRepository.save(manager);
         return userMapper.userToUserDto(manager);
     }
@@ -75,7 +74,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto addClient(ClientCreateDto clientCreateDto) {
         Client client = userMapper.clientCreateDtoToClient(clientCreateDto);
-        client.setBanned(false);
         userRepository.save(client);
         return userMapper.userToUserDto(client);
     }
@@ -196,8 +194,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-    public DiscountDto findDiscount(Long id) {
+    @Override
+    public ClientStatusDto findDiscount(Long id) {
         Client client = clientRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(String
@@ -209,7 +207,28 @@ public class UserServiceImpl implements UserService {
                         && clientStatus.getMinNumberOfReservations() <= client.getNumberOfReservations())
                 .findAny()
                 .get();
+        return new ClientStatusDto(status.getDiscount(), status.getRank());
 
-        return new DiscountDto(status.getDiscount(), status.getRank());
+        //return new DiscountDto(status.getDiscount(), status.getRank());
     }
+
+    @Override
+    public ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto) {
+        ClientStatus clientStatus = clientStatusRepository.getById(id);
+        clientStatus.setRank(clientStatusCreateDto.getRank());
+        clientStatus.setDiscount(clientStatusCreateDto.getDiscount());
+        clientStatus.setMinNumberOfReservations(clientStatusCreateDto.getMinNumberOfReservations());
+        clientStatus.setMaxNumberOfReservations(clientStatusCreateDto.getMaxNumberOfReservations());
+        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
+    }
+
+    @Override
+    public ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto) {
+        ClientStatus clientStatus = clientStatusRepository.getById(id);
+        clientStatus.setRank(discountCreateDto.getRank());
+        clientStatus.setDiscount(discountCreateDto.getDiscount());
+        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
+    }
+
+
 }

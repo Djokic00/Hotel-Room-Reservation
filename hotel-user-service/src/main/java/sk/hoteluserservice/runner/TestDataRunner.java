@@ -54,8 +54,8 @@ public class TestDataRunner implements CommandLineRunner {
 
         clientStatusRepository.save(new ClientStatus("Regular", 0, 3, 0));
         clientStatusRepository.save(new ClientStatus("Silver", 4, 8, 5));
-        clientStatusRepository.save(new ClientStatus("Gold", 8, 13, 10));
-        clientStatusRepository.save(new ClientStatus("Platinum", 14, 20,  15));
+        clientStatusRepository.save(new ClientStatus("Gold", 9, 14, 10));
+        clientStatusRepository.save(new ClientStatus("Platinum", 15, 20,  15));
 
     }
 }

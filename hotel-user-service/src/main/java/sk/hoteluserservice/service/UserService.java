@@ -2,6 +2,7 @@ package sk.hoteluserservice.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import sk.hoteluserservice.domain.ClientStatus;
 import sk.hoteluserservice.dto.*;
 
 public interface UserService {
@@ -18,7 +19,7 @@ public interface UserService {
     UserDto banUser(Long id, BanUserDto banUserDto);
     UserDto unbanUser(Long id, BanUserDto banUserDto);
     Boolean verify(String token);
-    DiscountDto findDiscount(Long id);
-
-
+    ClientStatusDto findDiscount(Long id);
+    ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
+    ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
 }
