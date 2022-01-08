@@ -4,7 +4,9 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import sk.hotelnotificationservice.dto.ClientDto;
 import sk.hotelnotificationservice.listener.helper.MessageHelper;
+import sk.hotelnotificationservice.mapper.NotificationMapper;
 import sk.hotelnotificationservice.service.EmailService;
+import sk.hotelnotificationservice.service.NotificationService;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -14,24 +16,29 @@ public class EmailListener {
 
     private MessageHelper messageHelper;
     private EmailService emailService;
+    private NotificationService notificationService;
 
-    public EmailListener(MessageHelper messageHelper, EmailService emailService) {
+    public EmailListener(MessageHelper messageHelper, EmailService emailService,
+                         NotificationService notificationService) {
         this.messageHelper = messageHelper;
         this.emailService = emailService;
+        this.notificationService = notificationService;
     }
 
     @JmsListener(destination = "${destination.registerClient}", concurrency = "5-10")
     public void registerClient(Message message) throws JMSException {
         ClientDto clientDto = messageHelper.getMessage(message, ClientDto.class);
         //System.out.println(clientDto.toString());
-        String content = "Pozdrav %ime %prezime, da bi" +
-                "ste se verifikovali idite na sledeci link: %link  " ;
-        String verifyURL = "http://localhost:8080/verify?token=" + clientDto.getVerificationCode();
-        content = content.replace("%ime", clientDto.getFirstName());
-        content = content.replace("%prezime", clientDto.getLastName());
-        content = content.replace("%link", verifyURL);
-        emailService.sendSimpleMessage(clientDto.getEmail(), "Email verification link",
-                content);
+
+//        String content = "Pozdrav %ime %prezime, da bi" +
+//                "ste se verifikovali idite na sledeci link: %link  " ;
+//        String verifyURL = "http://localhost:8081/verify?token=" + clientDto.getVerificationCode();
+//        content = content.replace("%ime", clientDto.getFirstName());
+//        content = content.replace("%prezime", clientDto.getLastName());
+//        content = content.replace("%link", verifyURL);
+//        emailService.sendSimpleMessage(clientDto.getEmail(), "Email verification link",
+//                content);
+        notificationService.sendMail(clientDto,"register");
 
     }
 }
