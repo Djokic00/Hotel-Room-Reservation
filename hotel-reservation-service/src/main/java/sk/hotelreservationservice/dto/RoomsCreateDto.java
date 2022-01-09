@@ -14,7 +14,7 @@ public class RoomsCreateDto {
     @NotNull
     private Integer lastNo;
     @NotBlank
-    private String hotelname;
+    private String hotelName;
 
     public String getType() {
         return type;
@@ -48,11 +48,11 @@ public class RoomsCreateDto {
         this.lastNo = lastNo;
     }
 
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 }

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 public class HotelCreateDto {
 
     @NotBlank
-    private String hotelname;
+    private String hotelName;
     @NotBlank
     private String description;
     @NotNull
@@ -14,12 +14,12 @@ public class HotelCreateDto {
     @NotBlank
     private String city;
 
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
     public String getDescription() {

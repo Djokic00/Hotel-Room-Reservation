@@ -51,4 +51,11 @@ public class ReservationServiceImpl implements ReservationService {
         bookingRepository.save(booking);
         return reservationMapper.bookingToBookingDto(booking);
     }
+
+    @Override
+    public Integer unavailableRooms(BookingCreateDto bookingCreateDto) {
+        Integer numberOfUnavailableRooms = roomsRepository.findUnavailableRoomsForBooking(bookingCreateDto.getHotelName(),
+                bookingCreateDto.getCity(),bookingCreateDto.getArrival(),bookingCreateDto.getDeparture(),bookingCreateDto.getRoomType());
+        return numberOfUnavailableRooms;
+    }
 }

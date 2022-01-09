@@ -22,7 +22,7 @@ public class ReservationMapper {
 
     public HotelDto hotelToHotelDto(Hotel hotel) {
         HotelDto hotelDto = new HotelDto();
-        hotelDto.setHotelname(hotel.getHotelname());
+        hotelDto.setHotelName(hotel.getHotelName());
         hotelDto.setCity(hotel.getCity());
         hotelDto.setDescription(hotel.getDescription());
         hotelDto.setNumberOfRooms(hotel.getNumberOfRooms());
@@ -31,7 +31,7 @@ public class ReservationMapper {
 
     public Hotel hotelCreateDtoToHotel(HotelCreateDto hotelCreateDto) {
         Hotel hotel = new Hotel();
-        hotel.setHotelname(hotelCreateDto.getHotelname());
+        hotel.setHotelName(hotelCreateDto.getHotelName());
         hotel.setCity(hotelCreateDto.getCity());
         hotel.setDescription(hotelCreateDto.getDescription());
         hotel.setNumberOfRooms(hotelCreateDto.getNumberOfRooms());
@@ -40,12 +40,12 @@ public class ReservationMapper {
 
     public RoomsDto roomsToRoomsDto(Rooms rooms) {
         RoomsDto roomsDto = new RoomsDto();
-        roomsDto.setHotelname(rooms.getHotel().getHotelname());
+        roomsDto.setHotelName(rooms.getHotel().getHotelName());
         roomsDto.setFirstNo(rooms.getFirstNo());
         roomsDto.setLastNo(rooms.getLastNo());
         roomsDto.setType(rooms.getType());
         roomsDto.setPrice(rooms.getPrice());
-        roomsDto.setAvailableRooms(rooms.getAvailableRooms());
+       // roomsDto.setAvailableRooms(rooms.getAvailableRooms());
         return roomsDto;
     }
 
@@ -55,8 +55,8 @@ public class ReservationMapper {
         rooms.setLastNo(roomsCreateDto.getLastNo());
         rooms.setType(roomsCreateDto.getType());
         rooms.setPrice(roomsCreateDto.getPrice());
-        rooms.setHotel(hotelRepository.findHotelByHotelname(roomsCreateDto.getHotelname()));
-        rooms.setAvailableRooms(roomsCreateDto.getLastNo()-roomsCreateDto.getFirstNo());
+        rooms.setHotel(hotelRepository.findHotelByHotelName(roomsCreateDto.getHotelName()));
+     //   rooms.setAvailableRooms(roomsCreateDto.getLastNo()-roomsCreateDto.getFirstNo());
         return rooms;
     }
 
@@ -65,6 +65,8 @@ public class ReservationMapper {
         bookingDto.setArrival(booking.getArrival());
         bookingDto.setDeparture(booking.getDeparture());
         bookingDto.setRoomType(booking.getRooms().getType());
+        bookingDto.setHotelName(booking.getHotelName());
+        bookingDto.setCity(booking.getCity());
         return bookingDto;
     }
 
@@ -73,6 +75,8 @@ public class ReservationMapper {
         booking.setArrival(bookingCreateDto.getArrival());
         booking.setDeparture(bookingCreateDto.getDeparture());
         booking.setRooms(roomsRepository.findRoomsByType(bookingCreateDto.getRoomType()));
+        booking.setHotelName(bookingCreateDto.getHotelName());
+        booking.setCity(bookingCreateDto.getCity());
         return booking;
     }
 

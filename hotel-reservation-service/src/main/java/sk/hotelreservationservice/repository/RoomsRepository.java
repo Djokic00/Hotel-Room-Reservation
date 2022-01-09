@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import sk.hotelreservationservice.domain.Rooms;
 
+import java.sql.Date;
+
 @Repository
 public interface RoomsRepository extends JpaRepository<Rooms, Long> {
 
@@ -18,4 +20,7 @@ public interface RoomsRepository extends JpaRepository<Rooms, Long> {
     //https://www.baeldung.com/spring-data-jpa-query
     //https://stackoverflow.com/questions/24285118/show-available-rooms-between-to-dates-sql
 
+    @Query(value = "select count(booking.id) from booking join rooms on booking.rooms_id = rooms.id where booking.hotel_name = ? and booking.city = ? and booking.departure >= to_date(?, 'yyyy-mm-dd')\n" +
+            "  and arrival <= to_date(?, 'yyyy-mm-dd') and rooms.type = ?", nativeQuery = true)
+    Integer findUnavailableRoomsForBooking(String hotelName, String city, Date arrival, Date departure, String type);
 }

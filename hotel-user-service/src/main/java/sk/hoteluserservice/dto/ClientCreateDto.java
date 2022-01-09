@@ -3,6 +3,7 @@ package sk.hoteluserservice.dto;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
@@ -18,8 +19,7 @@ public class ClientCreateDto {
     private String username;
     @Length(min = 8, max = 20)
     private String password;
-//    @NotBlank
-//    private Date birthday;
+    private Date birthday;
     @NotNull
     private Integer contact;
     @NotNull
@@ -66,13 +66,13 @@ public class ClientCreateDto {
         this.password = password;
     }
 
-//    public Date getBirthday() {
-//        return birthday;
-//    }
-//
-//    public void setBirthday(Date birthday) {
-//        this.birthday = birthday;
-//    }
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     public Integer getContact() {
         return contact;

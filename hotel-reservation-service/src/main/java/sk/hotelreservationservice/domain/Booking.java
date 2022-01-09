@@ -1,6 +1,7 @@
 package sk.hotelreservationservice.domain;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 public class Booking {
@@ -11,8 +12,10 @@ public class Booking {
 
        // private String client; kako izvuci ulogovanog korisnika?
        // private String price; racuna se broj_nocenja*cena*(100-popust)/100
-        private String arrival;
-        private String departure;
+        private Date arrival;
+        private Date departure;
+        private String hotelName;
+        private String city;
 
         @ManyToOne(optional = false)
         private Rooms rooms;
@@ -41,19 +44,20 @@ public class Booking {
 //        this.price = price;
 //    }
 
-    public String getArrival() {
+
+    public Date getArrival() {
         return arrival;
     }
 
-    public void setArrival(String arrival) {
+    public void setArrival(Date arrival) {
         this.arrival = arrival;
     }
 
-    public String getDeparture() {
+    public Date getDeparture() {
         return departure;
     }
 
-    public void setDeparture(String departure) {
+    public void setDeparture(Date departure) {
         this.departure = departure;
     }
 
@@ -63,5 +67,21 @@ public class Booking {
 
     public void setRooms(Rooms rooms) {
         this.rooms = rooms;
+    }
+
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

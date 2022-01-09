@@ -6,8 +6,8 @@ public class RoomsDto {
     private String price;
     private Integer firstNo;
     private Integer lastNo;
-    private String hotelname;
-    private Integer availableRooms;
+    private String hotelName;
+   // private Integer availableRooms;
 
     public String getType() {
         return type;
@@ -41,19 +41,19 @@ public class RoomsDto {
         this.lastNo = lastNo;
     }
 
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
-    public Integer getAvailableRooms() {
-        return availableRooms;
-    }
-
-    public void setAvailableRooms(Integer availableRooms) {
-        this.availableRooms = availableRooms;
-    }
+//    public Integer getAvailableRooms() {
+//        return availableRooms;
+//    }
+//
+//    public void setAvailableRooms(Integer availableRooms) {
+//        this.availableRooms = availableRooms;
+//    }
 }

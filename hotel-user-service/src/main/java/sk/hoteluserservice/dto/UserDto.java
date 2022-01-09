@@ -1,5 +1,7 @@
 package sk.hoteluserservice.dto;
 
+import java.sql.Date;
+
 public class UserDto{
 
     private Long id;
@@ -9,6 +11,7 @@ public class UserDto{
     private String username;
     private Boolean isBanned;
     private Boolean enabled;
+    private Date bithday;
 
     public Long getId() {
         return id;
@@ -64,5 +67,13 @@ public class UserDto{
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Date getBithday() {
+        return bithday;
+    }
+
+    public void setBithday(Date bithday) {
+        this.bithday = bithday;
     }
 }

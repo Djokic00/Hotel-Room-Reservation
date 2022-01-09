@@ -1,28 +1,32 @@
 package sk.hotelreservationservice.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import java.sql.Date;
 
 public class BookingCreateDto {
-    @NotBlank
-    private String arrival;
-    @NotBlank
-    private String departure;
+    private Date arrival;
+    private Date departure;
     @NotBlank
     private String roomType;
+    @NotBlank
+    private String hotelName;
+    @NotBlank
+    private String city;
 
-    public String getArrival() {
+    public Date getArrival() {
         return arrival;
     }
 
-    public void setArrival(String arrival) {
+    public void setArrival(Date arrival) {
         this.arrival = arrival;
     }
 
-    public String getDeparture() {
+    public Date getDeparture() {
         return departure;
     }
 
-    public void setDeparture(String departure) {
+    public void setDeparture(Date departure) {
         this.departure = departure;
     }
 
@@ -32,5 +36,21 @@ public class BookingCreateDto {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
+    }
+
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

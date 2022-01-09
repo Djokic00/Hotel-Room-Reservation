@@ -3,7 +3,7 @@ package sk.hotelreservationservice.dto;
 public class HotelDto {
 
     private Long id;
-    private String hotelname;
+    private String hotelName;
     private String description;
     private Integer numberOfRooms;
     private String city;
@@ -16,12 +16,12 @@ public class HotelDto {
         this.id = id;
     }
 
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
     public String getDescription() {

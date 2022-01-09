@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-    Hotel findHotelByHotelname(String hotelname);
+    Hotel findHotelByHotelName(String hotelName);
 
 }

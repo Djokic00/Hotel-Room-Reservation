@@ -1,6 +1,8 @@
 package sk.hoteluserservice.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -16,7 +18,10 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-  //  private Date birthday;
+
+   // @JsonFormat(pattern="yyyy-MM-dd")
+    private Date birthday;
+
     private Integer contact;
     private Boolean isBanned;
     @Column(name = "verification_code", length = 64)
@@ -75,13 +80,13 @@ public class User {
         this.lastName = lastName;
     }
 
-//    public Date getBirthday() {
-//        return birthday;
-//    }
-//
-//    public void setBirthday(Date birthday) {
-//        this.birthday = birthday;
-//    }
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     public Integer getContact() {
         return contact;

@@ -12,7 +12,7 @@ public class Rooms {
     private String price;
     private Integer firstNo;
     private Integer lastNo;
-    private Integer availableRooms;
+    //private Integer availableRooms;
 
     @ManyToOne(optional = false)
     private Hotel hotel;
@@ -65,11 +65,11 @@ public class Rooms {
         this.hotel = hotel;
     }
 
-    public Integer getAvailableRooms() {
-        return availableRooms;
-    }
-
-    public void setAvailableRooms(Integer availableRooms) {
-        this.availableRooms = availableRooms;
-    }
+//    public Integer getAvailableRooms() {
+//        return availableRooms;
+//    }
+//
+//    public void setAvailableRooms(Integer availableRooms) {
+//        this.availableRooms = availableRooms;
+//    }
 }

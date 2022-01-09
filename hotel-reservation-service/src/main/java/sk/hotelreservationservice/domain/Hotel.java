@@ -3,13 +3,13 @@ package sk.hotelreservationservice.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(indexes = {@Index(columnList = "hotelname", unique = true)})
+@Table(indexes = @Index(name = "index", columnList = "hotelName, city", unique = true))
 public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String hotelname;
+    private String hotelName;
     private String description;
     private Integer numberOfRooms;
     private String city;
@@ -22,12 +22,12 @@ public class Hotel {
         this.id = id;
     }
 
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
     public String getDescription() {
