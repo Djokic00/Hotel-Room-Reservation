@@ -8,5 +8,6 @@ public interface ReservationService {
     HotelDto addHotel(HotelCreateDto hotelCreateDto);
     BookingDto addBooking(BookingCreateDto bookingCreateDto);
     Integer unavailableRooms(BookingCreateDto bookingCreateDto);
+    Integer availableRooms(BookingCreateDto bookingCreateDto);
 
 }

@@ -21,6 +21,6 @@ public interface RoomsRepository extends JpaRepository<Rooms, Long> {
     //https://stackoverflow.com/questions/24285118/show-available-rooms-between-to-dates-sql
 
     @Query(value = "select count(booking.id) from booking join rooms on booking.rooms_id = rooms.id where booking.hotel_name = ? and booking.city = ? and booking.departure >= to_date(?, 'yyyy-mm-dd')\n" +
-            "  and arrival <= to_date(?, 'yyyy-mm-dd') and rooms.type = ?", nativeQuery = true)
-    Integer findUnavailableRoomsForBooking(String hotelName, String city, Date arrival, Date departure, String type);
+            "  and arrival <= to_date(?, 'yyyy-mm-dd') and rooms.type = ? sort rooms.price", nativeQuery = true)
+    Integer findUnavailableRoomsForBooking(String hotelName, String city, Date departure, Date arrival, String type);
 }

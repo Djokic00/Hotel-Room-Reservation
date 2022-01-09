@@ -58,4 +58,12 @@ public class ReservationServiceImpl implements ReservationService {
                 bookingCreateDto.getCity(),bookingCreateDto.getArrival(),bookingCreateDto.getDeparture(),bookingCreateDto.getRoomType());
         return numberOfUnavailableRooms;
     }
+
+    @Override
+    public Integer availableRooms(BookingCreateDto bookingCreateDto) {
+        Integer numberOfUnavailableRooms = roomsRepository.findUnavailableRoomsForBooking(bookingCreateDto.getHotelName(),
+                bookingCreateDto.getCity(),bookingCreateDto.getArrival(),bookingCreateDto.getDeparture(),bookingCreateDto.getRoomType());
+        Integer numberOfRooms = roomsRepository.findRoomsByType(bookingCreateDto.getRoomType()).getLastNo() - roomsRepository.findRoomsByType(bookingCreateDto.getRoomType()).getFirstNo() + 1 ;
+        return numberOfRooms-numberOfUnavailableRooms;
+    }
 }

@@ -40,11 +40,18 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.addBooking(bookingCreateDto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Number of rooms")
+    @ApiOperation(value = "Number of unavailable rooms")
     @PostMapping("/booking/unavailable")
     public ResponseEntity<Integer> unavailable(@RequestBody @Valid
                                                           BookingCreateDto bookingCreateDto) {
         return new ResponseEntity<>(reservationService.unavailableRooms(bookingCreateDto), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Number of available rooms")
+    @PostMapping("/booking/available")
+    public ResponseEntity<Integer> availableRooms(@RequestBody @Valid
+                                                       BookingCreateDto bookingCreateDto) {
+        return new ResponseEntity<>(reservationService.availableRooms(bookingCreateDto), HttpStatus.CREATED);
     }
 
 
