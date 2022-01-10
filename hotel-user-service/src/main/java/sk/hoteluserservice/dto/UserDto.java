@@ -11,7 +11,7 @@ public class UserDto{
     private String username;
     private Boolean isBanned;
     private Boolean enabled;
-    private Date bithday;
+    //private Date birthday;
 
     public Long getId() {
         return id;
@@ -69,11 +69,11 @@ public class UserDto{
         this.enabled = enabled;
     }
 
-    public Date getBithday() {
-        return bithday;
-    }
-
-    public void setBithday(Date bithday) {
-        this.bithday = bithday;
-    }
+//    public Date getBirthday() {
+//        return birthday;
+//    }
+//
+//    public void setBirthday(Date bithday) {
+//        this.birthday = bithday;
+//    }
 }

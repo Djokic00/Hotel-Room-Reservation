@@ -37,8 +37,15 @@ public class ReservationController {
     @PostMapping("/booking")
     public ResponseEntity<BookingDto> saveBooking(@RequestBody @Valid
                                                         BookingCreateDto bookingCreateDto) {
-
         return new ResponseEntity<>(reservationService.addBooking(bookingCreateDto), HttpStatus.CREATED);
+    }
+
+    // Valjda je delete mapping
+    @ApiOperation(value = "Remove booking")
+    @DeleteMapping("/deleteBooking")
+    public ResponseEntity<BookingDto> removeBooking(@RequestBody @Valid
+                                                          BookingCreateDto bookingCreateDto) {
+        return new ResponseEntity<>(reservationService.removeBooking(bookingCreateDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Number of unavailable rooms")

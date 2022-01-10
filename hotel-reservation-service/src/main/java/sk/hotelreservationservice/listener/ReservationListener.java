@@ -1,13 +1,16 @@
 package sk.hotelreservationservice.listener;
 
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
 import sk.hotelreservationservice.dto.ClientDto;
 import sk.hotelreservationservice.listener.helper.MessageHelper;
 import sk.hotelreservationservice.service.ReservationService;
+import sk.hotelreservationservice.userservice.dto.ClientQueueDto;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 
+@Component
 public class ReservationListener {
     private MessageHelper messageHelper;
     private ReservationService reservationService;
@@ -19,7 +22,7 @@ public class ReservationListener {
 
     @JmsListener(destination = "${destination.findEmail}", concurrency = "5-10")
     public void forwardClientAndBooking(Message message) throws JMSException {
-        ClientDto clientDto = messageHelper.getMessage(message, ClientDto.class);
+        ClientQueueDto clientDto = messageHelper.getMessage(message, ClientQueueDto.class);
         reservationService.forwardClientAndBooking(clientDto);
     }
 }

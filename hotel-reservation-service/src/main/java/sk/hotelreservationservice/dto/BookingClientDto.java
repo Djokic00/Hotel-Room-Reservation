@@ -19,6 +19,7 @@ public class BookingClientDto {
     private String hotelName;
     private String city;
 
+    private Boolean increment;
 
     public String getUsername() {
         return username;
@@ -122,5 +123,13 @@ public class BookingClientDto {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Boolean getIncrement() {
+        return increment;
+    }
+
+    public void setIncrement(Boolean increment) {
+        this.increment = increment;
     }
 }

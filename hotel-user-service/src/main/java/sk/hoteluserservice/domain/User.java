@@ -20,7 +20,7 @@ public class User {
     private String lastName;
 
    // @JsonFormat(pattern="yyyy-MM-dd")
-    //private Date birthday;
+    private Date birthday;
 
     private String contact;
     private Boolean isBanned;
@@ -80,13 +80,13 @@ public class User {
         this.lastName = lastName;
     }
 
-//    public Date getBirthday() {
-//        return birthday;
-//    }
-//
-//    public void setBirthday(Date birthday) {
-//        this.birthday = birthday;
-//    }
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     public String getContact() {
         return contact;

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
                            ClientRepository clientRepository, ManagerRepository managerRepository,
                            ClientStatusRepository clientStatusRepository,
                            JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination,
-                           @Value("${destination.findEmail}") String findEmailDestination ) {
+                           @Value("${destination.findEmail}") String findEmailDestination, MessageHelper messageHelper ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
         this.clientRegisterDestination = clientRegisterDestination;
         this.clientStatusRepository = clientStatusRepository;
         this.findEmailDestination = findEmailDestination;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -198,11 +199,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public ClientStatusDto findDiscount(Long id) {
-        Client client = clientRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException(String
-                        .format("User with id: %d not found.", id)));
+    public ClientStatusDto findDiscount(String username) {
+        Client client = clientRepository.findUserByUsername(username);
+//                .orElseThrow(() -> new NotFoundException(String
+//                        .format("User with id: %d not found.", username)));
         List<ClientStatus> clientStatusList = clientStatusRepository.findAll();
         //get discount
         ClientStatus status = clientStatusList.stream()
@@ -211,8 +211,6 @@ public class UserServiceImpl implements UserService {
                 .findAny()
                 .get();
         return new ClientStatusDto(status.getDiscount(), status.getRank());
-
-        //return new DiscountDto(status.getDiscount(), status.getRank());
     }
 
     @Override
@@ -226,13 +224,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void incrementReservation(String username) {
+    public void changeNumberOfReservations(String username, Boolean increment) {
         Client client = clientRepository.findUserByUsername(username);
-        client.setNumberOfReservations(client.getNumberOfReservations() + 1);
+        if (increment) client.setNumberOfReservations(client.getNumberOfReservations() + 1);
+        else client.setNumberOfReservations(client.getNumberOfReservations() - 1);
         clientRepository.save(client);
-        ClientDto clientDto = userMapper.clientToClientDto(client);
-        jmsTemplate.convertAndSend(findEmailDestination, messageHelper.createTextMessage(clientDto));
+        ClientQueueDto clientQueueDto = userMapper.clientToClientQueueDto(client);
+        clientQueueDto.setIncrement(increment);
+        jmsTemplate.convertAndSend(findEmailDestination, messageHelper.createTextMessage(clientQueueDto));
     }
+
 
     @Override
     public ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto) {

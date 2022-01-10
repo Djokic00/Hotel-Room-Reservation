@@ -11,7 +11,7 @@ public class Booking {
     private Long id;
 
     private String username;
-   // private String price; racuna se broj_nocenja*cena*(100-popust)/100
+    private String price; // racuna se broj_nocenja*cena*(100-popust)/100
     private Date arrival;
     private Date departure;
     private String hotelName;
@@ -36,13 +36,13 @@ public class Booking {
 //        this.client = client;
 //    }
 
-//    public String getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(String price) {
-//        this.price = price;
-//    }
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 
 
     public Date getArrival() {

@@ -73,13 +73,13 @@ public class NotificationServiceImpl implements NotificationService {
         content = content.replace("%lastname", bookingClientDto.getLastName());
         content = content.replace("%username", bookingClientDto.getUsername());
         content = content.replace("%email", bookingClientDto.getEmail());
-        content = content.replace((CharSequence) "%arrival", (CharSequence) bookingClientDto.getArrival());
-        content = content.replace((CharSequence) "%departure", (CharSequence) bookingClientDto.getDeparture());
+        //content = content.replace((CharSequence) "%arrival", (CharSequence) bookingClientDto.getArrival());
+        //content = content.replace((CharSequence) "%departure", (CharSequence) bookingClientDto.getDeparture());
         content = content.replace("%city", bookingClientDto.getCity());
         content = content.replace("%hotelname", bookingClientDto.getHotelName());
         content = content.replace("%roomtype", bookingClientDto.getRoomType());
         content = content.replace("%email", bookingClientDto.getEmail());
-        content = content.replace((CharSequence) "%birthday", (CharSequence) bookingClientDto.getBirthday());
+        //content = content.replace((CharSequence) "%birthday", (CharSequence) bookingClientDto.getBirthday());
         content = content.replace("%passportnumber", bookingClientDto.getPassportNumber());
         content = content.replace("%contact", bookingClientDto.getContact());
 

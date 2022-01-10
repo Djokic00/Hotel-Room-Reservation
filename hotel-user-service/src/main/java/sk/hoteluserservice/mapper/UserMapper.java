@@ -65,6 +65,16 @@ public class UserMapper {
         return client;
     }
 
+    public ClientQueueDto clientToClientQueueDto(Client client) {
+        ClientQueueDto clientQueueDto = new ClientQueueDto();
+        clientQueueDto.setUsername(client.getUsername());
+        clientQueueDto.setFirstName(client.getFirstName());
+        clientQueueDto.setLastName(client.getLastName());
+        clientQueueDto.setEmail(client.getEmail());
+        clientQueueDto.setBirthday(client.getBirthday());
+        return clientQueueDto;
+    }
+
     public ManagerDto managerToManagerDto(Manager manager) {
         ManagerDto managerDto = new ManagerDto();
         managerDto.setContact(manager.getContact());

@@ -19,8 +19,8 @@ public interface UserService {
     UserDto banUser(Long id, BanUserDto banUserDto);
     UserDto unbanUser(Long id, BanUserDto banUserDto);
     Boolean verify(String token);
-    ClientStatusDto findDiscount(Long id);
+    ClientStatusDto findDiscount(String username);
     ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
     ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
-    void incrementReservation(String username);
+    void changeNumberOfReservations(String username, Boolean increment);
 }

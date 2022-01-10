@@ -152,9 +152,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "Discount")
-    @GetMapping("/{id}/discount")
-    public ResponseEntity<ClientStatusDto> getDiscount(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(userService.findDiscount(id), HttpStatus.OK);
+    @GetMapping("/{username}/discount")
+    public ResponseEntity<ClientStatusDto> getDiscount(@PathVariable("username") String username) {
+        return new ResponseEntity<>(userService.findDiscount(username), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Discount Update")

@@ -1,0 +1,41 @@
+package sk.hotelreservationservice.userservice.dto;
+
+import sk.hotelreservationservice.domain.Booking;
+
+public class ClientBookingDto {
+    private String username;
+    private Boolean increment;
+    private Long bookingId;
+
+    public ClientBookingDto() {
+
+    }
+
+    public ClientBookingDto(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Boolean getIncrement() {
+        return increment;
+    }
+
+    public void setIncrement(Boolean increment) {
+        this.increment = increment;
+    }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+}
