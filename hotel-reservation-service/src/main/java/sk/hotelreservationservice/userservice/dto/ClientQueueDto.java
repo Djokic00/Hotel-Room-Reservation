@@ -9,6 +9,7 @@ public class ClientQueueDto {
     private String lastName;
     private Date birthday;
     private Boolean increment;
+    private Long bookingId;
 
     public String getUsername() {
         return username;
@@ -57,4 +58,14 @@ public class ClientQueueDto {
     public void setIncrement(Boolean increment) {
         this.increment = increment;
     }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+
 }

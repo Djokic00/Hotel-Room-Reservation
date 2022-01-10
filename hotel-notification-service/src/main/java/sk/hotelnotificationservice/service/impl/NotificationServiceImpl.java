@@ -80,8 +80,8 @@ public class NotificationServiceImpl implements NotificationService {
         content = content.replace("%roomtype", bookingClientDto.getRoomType());
         content = content.replace("%email", bookingClientDto.getEmail());
         //content = content.replace((CharSequence) "%birthday", (CharSequence) bookingClientDto.getBirthday());
-        content = content.replace("%passportnumber", bookingClientDto.getPassportNumber());
-        content = content.replace("%contact", bookingClientDto.getContact());
+        //content = content.replace("%passportnumber", bookingClientDto.getPassportNumber());
+        //content = content.replace("%contact", bookingClientDto.getContact());
 
         emailService.sendSimpleMessage(bookingClientDto.getEmail(), notificationName, content);
 

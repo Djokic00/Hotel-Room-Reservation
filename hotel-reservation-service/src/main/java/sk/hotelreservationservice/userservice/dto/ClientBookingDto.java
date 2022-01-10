@@ -38,4 +38,13 @@ public class ClientBookingDto {
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
     }
+
+    @Override
+    public String toString() {
+        return "ClientBookingDto{" +
+                "username='" + username + '\'' +
+                ", increment=" + increment +
+                ", bookingId=" + bookingId +
+                '}';
+    }
 }

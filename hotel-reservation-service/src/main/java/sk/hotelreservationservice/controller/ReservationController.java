@@ -42,10 +42,10 @@ public class ReservationController {
 
     // Valjda je delete mapping
     @ApiOperation(value = "Remove booking")
-    @DeleteMapping("/deleteBooking")
-    public ResponseEntity<BookingDto> removeBooking(@RequestBody @Valid
+    @PostMapping("/deleteBooking/{id}")
+    public ResponseEntity<BookingDto> removeBooking(@PathVariable("id") Long id,@RequestBody @Valid
                                                           BookingCreateDto bookingCreateDto) {
-        return new ResponseEntity<>(reservationService.removeBooking(bookingCreateDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(reservationService.removeBooking(bookingCreateDto, id), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Number of unavailable rooms")

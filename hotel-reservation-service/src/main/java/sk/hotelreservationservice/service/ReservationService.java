@@ -9,7 +9,7 @@ public interface ReservationService {
     RoomsDto addRooms(RoomsCreateDto roomsCreateDto);
     HotelDto addHotel(HotelCreateDto hotelCreateDto);
     BookingDto addBooking(BookingCreateDto bookingCreateDto);
-    BookingDto removeBooking(BookingCreateDto bookingCreateDto);
+    BookingDto removeBooking(BookingCreateDto bookingCreateDto, Long bookingDd);
     Integer unavailableRooms(BookingCreateDto bookingCreateDto);
     Integer availableRooms(BookingCreateDto bookingCreateDto);
     void forwardClientAndBooking(ClientQueueDto clientQueueDto);

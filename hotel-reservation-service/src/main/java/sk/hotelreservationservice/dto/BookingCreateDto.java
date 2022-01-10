@@ -15,6 +15,7 @@ public class BookingCreateDto {
     private String city;
     private String username;
 
+
     public Date getArrival() {
         return arrival;
     }

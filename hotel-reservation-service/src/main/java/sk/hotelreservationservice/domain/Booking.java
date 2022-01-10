@@ -92,4 +92,18 @@ public class Booking {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", price='" + price + '\'' +
+                ", arrival=" + arrival +
+                ", departure=" + departure +
+                ", hotelName='" + hotelName + '\'' +
+                ", city='" + city + '\'' +
+                ", rooms=" + rooms +
+                '}';
+    }
 }

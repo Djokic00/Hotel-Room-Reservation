@@ -22,5 +22,5 @@ public interface UserService {
     ClientStatusDto findDiscount(String username);
     ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
     ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
-    void changeNumberOfReservations(String username, Boolean increment);
+    void changeNumberOfReservations(ClientBookingDto clientBookingDto);
 }

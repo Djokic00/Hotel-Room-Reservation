@@ -25,12 +25,8 @@ public class BookingListener {
     @JmsListener(destination = "${destination.bookingNumber}", concurrency = "5-10")
     public void incrementNumberOfBooking(Message message) throws JMSException {
         ClientBookingDto client = messageHelper.getMessage(message, ClientBookingDto.class);
-        userService.incrementReservation(client.getUsername());
+        System.out.println("user: " + client.toString());
+        userService.changeNumberOfReservations(client);
     }
 
-    @JmsListener(destination = "${destination.decrementBooking}", concurrency = "5-10")
-    public void decrementNumberOfBooking(Message message) throws JMSException {
-        ClientBookingDto client = messageHelper.getMessage(message, ClientBookingDto.class);
-        userService.decrementReservation(client.getUsername());
-    }
 }

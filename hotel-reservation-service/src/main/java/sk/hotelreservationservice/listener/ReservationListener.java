@@ -22,7 +22,8 @@ public class ReservationListener {
 
     @JmsListener(destination = "${destination.findEmail}", concurrency = "5-10")
     public void forwardClientAndBooking(Message message) throws JMSException {
-        ClientQueueDto clientDto = messageHelper.getMessage(message, ClientQueueDto.class);
-        reservationService.forwardClientAndBooking(clientDto);
+        ClientQueueDto clientQueueDto = messageHelper.getMessage(message, ClientQueueDto.class);
+        System.out.println("id u forwardu : " + clientQueueDto.getBookingId());
+        reservationService.forwardClientAndBooking(clientQueueDto);
     }
 }

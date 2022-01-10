@@ -3,6 +3,7 @@ package sk.hoteluserservice.dto;
 public class ClientBookingDto {
     private String username;
     private Boolean increment;
+    private Long bookingId;
 
     public ClientBookingDto() {
 
@@ -26,5 +27,22 @@ public class ClientBookingDto {
 
     public void setIncrement(Boolean increment) {
         this.increment = increment;
+    }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    @Override
+    public String toString() {
+        return "ClientBookingDto{" +
+                "username='" + username + '\'' +
+                ", increment=" + increment +
+                ", bookingId=" + bookingId +
+                '}';
     }
 }

@@ -25,6 +25,9 @@ import sk.hotelreservationservice.userservice.dto.ClientQueueDto;
 import sk.hotelreservationservice.userservice.dto.ClientStatusDto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 @Transactional
@@ -80,31 +83,32 @@ public class ReservationServiceImpl implements ReservationService {
         ResponseEntity<ClientStatusDto> discountDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
                 bookingCreateDto.getUsername() + "/discount", HttpMethod.GET, null, ClientStatusDto.class);
 
-//        //calculate price
-//        BigDecimal price = Integer.parseInt(booking.getPrice()).divide(BigDecimal.valueOf(100))
-//                .multiply(BigDecimal.valueOf(100 - discountDtoResponseEntity.getBody().getDiscount()));
+        LocalDate start = LocalDate.parse(booking.getArrival().toString()); //???
+        LocalDate end = LocalDate.parse(booking.getDeparture().toString());
 
-        // Integer numberOfNights = booking.getDeparture() - booking.getArrival();
-
-        Double newPrice = Double.parseDouble(booking.getPrice()) * (100 - discountDtoResponseEntity.getBody().getDiscount());
-
-        //broj_nocenja*cena*(100-popust)/100
-
+        long diff = DAYS.between(start, end);
+        String roomprice = roomsRepository.findPriceByHotelCityAndRoomType(booking.getHotelName(),booking.getCity(),booking.getRooms().getType());
+        Double newPrice = diff * Double.parseDouble(roomprice) * (100 - discountDtoResponseEntity.getBody().getDiscount()) / 100;
+//        //mora da pronadje cenu za taj tip sobe i za taj hotel i za taj grad
+//        //broj_nocenja*cena*(100-popust)/100
+//
         booking.setPrice(String.valueOf(newPrice));
         bookingRepository.save(booking);
         ClientBookingDto clientBookingDto = new ClientBookingDto(booking.getUsername());
         clientBookingDto.setIncrement(true);
-        clientBookingDto.setBookingId(booking.getId());
+        Booking b = bookingRepository.findLastBookingByUsername(booking.getUsername());
+        clientBookingDto.setBookingId(b.getId());
+        System.out.println("clientBookingDto b : " + clientBookingDto.toString());
         jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientBookingDto));
         return reservationMapper.bookingToBookingDto(booking);
     }
 
     @Override
-    public BookingDto removeBooking(BookingCreateDto bookingCreateDto) {
+    public BookingDto removeBooking(BookingCreateDto bookingCreateDto, Long bookingId) {
         Booking booking = reservationMapper.bookingCreateDtoToBooking(bookingCreateDto);
         ClientBookingDto clientBookingDto = new ClientBookingDto(booking.getUsername());
         clientBookingDto.setIncrement(false);
-        clientBookingDto.setBookingId(booking.getId());
+        clientBookingDto.setBookingId(bookingId);
         jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientBookingDto));
         return reservationMapper.bookingToBookingDto(booking);
     }
@@ -128,7 +132,9 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void forwardClientAndBooking(ClientQueueDto clientQueueDto) {
         // FindBookingByUsernameAndID
-        Booking booking = bookingRepository.findBookingByUsername(clientQueueDto.getUsername());
+        Booking booking = bookingRepository.findBookingById(clientQueueDto.getBookingId());
+        System.out.println(clientQueueDto.getBookingId());
+        System.out.println(booking.toString());
         BookingClientDto bookingClientDto = new BookingClientDto();
         bookingClientDto.setArrival(booking.getArrival());
         bookingClientDto.setDeparture(booking.getDeparture());
