@@ -226,15 +226,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeNumberOfReservations(ClientBookingDto clientBookingDto) {
         Client client = clientRepository.findUserByUsername(clientBookingDto.getUsername());
-        System.out.println("Change Number of Reservations" + client.getUsername() + " " + client.getId());
         if (clientBookingDto.getIncrement()) client.setNumberOfReservations(client.getNumberOfReservations() + 1);
         else client.setNumberOfReservations(client.getNumberOfReservations() - 1);
         clientRepository.save(client);
         ClientQueueDto clientQueueDto = userMapper.clientToClientQueueDto(client);
         clientQueueDto.setIncrement(clientBookingDto.getIncrement());
         clientQueueDto.setBookingId(clientBookingDto.getBookingId());
-        System.out.println("id u user servisu: " + clientBookingDto.getBookingId());
-        System.out.println("id queue " + clientQueueDto.getBookingId());
         jmsTemplate.convertAndSend(findEmailDestination, messageHelper.createTextMessage(clientQueueDto));
     }
 

@@ -4,9 +4,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(indexes = {@Index(columnList = "name", unique = true)})
-public class NotificationType {
+public class Notification {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String message;
 
@@ -25,5 +27,13 @@ public class NotificationType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -34,9 +34,9 @@ public class EmailListener {
     @JmsListener(destination = "${destination.forwardClientBooking}", concurrency = "5-10")
     public void reservationNotification(Message message) throws JMSException {
         BookingClientDto bookingClientDto = messageHelper.getMessage(message, BookingClientDto.class);
-        if (bookingClientDto.getIncrement())
-        notificationService.sendReservationMail(bookingClientDto,"reservation");
-        else notificationService.sendReservationMail(bookingClientDto,"cancel reservation");
+        if (bookingClientDto.getIncrement()) {
+            notificationService.sendReservationMail(bookingClientDto,"reservation");
+        } else notificationService.sendReservationMail(bookingClientDto,"cancelReservation");
     }
 
 

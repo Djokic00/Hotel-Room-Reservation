@@ -1,34 +1,32 @@
 package sk.hotelnotificationservice.mapper;
 
 import org.springframework.stereotype.Component;
-import sk.hotelnotificationservice.domain.NotificationType;
-import sk.hotelnotificationservice.dto.NotificationTypeCreateDto;
-import sk.hotelnotificationservice.dto.NotificationTypeDto;
-import sk.hotelnotificationservice.repository.NotificationTypeRepository;
+import sk.hotelnotificationservice.domain.Notification;
+import sk.hotelnotificationservice.dto.NotificationCreateDto;
+import sk.hotelnotificationservice.dto.NotificationDto;
+import sk.hotelnotificationservice.repository.NotificationRepository;
 
 @Component
 public class NotificationMapper {
 
-    private NotificationTypeRepository notificationTypeRepository;
+    private NotificationRepository notificationRepository;
 
-    public NotificationMapper(NotificationTypeRepository notificationTypeRepository) {
-        this.notificationTypeRepository = notificationTypeRepository;
+    public NotificationMapper(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
     }
 
-    public NotificationTypeDto notifTypeToNotifTypeDto(NotificationType notifType){
-
-        NotificationTypeDto notificationTypeDto=new NotificationTypeDto();
-        notificationTypeDto.setMessage(notifType.getMessage());
-        notificationTypeDto.setName(notifType.getName());
-
-        return notificationTypeDto;
+    public NotificationDto notificationToNotificationDto(Notification notification){
+        NotificationDto notificationDto = new NotificationDto();
+        notificationDto.setMessage(notification.getMessage());
+        notificationDto.setName(notification.getName());
+        return notificationDto;
     }
 
-    public NotificationType notifTypeCreateDtoToNotifType(NotificationTypeCreateDto notificationTypeCreateDto){
+    public Notification notificationCreateDtoToNotification(NotificationCreateDto notificationCreateDto){
 
-        NotificationType notificationType=new NotificationType();
-        notificationType.setMessage(notificationTypeCreateDto.getMessage());
-        notificationType.setName(notificationTypeCreateDto.getName());
+        Notification notificationType=new Notification();
+        notificationType.setMessage(notificationCreateDto.getMessage());
+        notificationType.setName(notificationCreateDto.getName());
 
         return notificationType;
     }

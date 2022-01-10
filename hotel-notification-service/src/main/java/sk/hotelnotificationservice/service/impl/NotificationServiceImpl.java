@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sk.hotelnotificationservice.domain.NotificationHistory;
-import sk.hotelnotificationservice.domain.NotificationType;
+import sk.hotelnotificationservice.domain.Notification;
 import sk.hotelnotificationservice.dto.*;
 import sk.hotelnotificationservice.mapper.NotificationMapper;
 import sk.hotelnotificationservice.repository.NotificationHistoryRepository;
-import sk.hotelnotificationservice.repository.NotificationTypeRepository;
+import sk.hotelnotificationservice.repository.NotificationRepository;
 import sk.hotelnotificationservice.service.EmailService;
 import sk.hotelnotificationservice.service.NotificationService;
 
@@ -18,34 +18,46 @@ import javax.transaction.Transactional;
 @Transactional
 public class NotificationServiceImpl implements NotificationService {
 
-    private NotificationTypeRepository notificationTypeRepository;
+    private NotificationRepository notificationRepository;
     private NotificationMapper notificationMapper;
     private EmailService emailService;
     private NotificationHistoryRepository notificationHistoryRepository;
 
-    public NotificationServiceImpl(NotificationTypeRepository notificationTypeRepository, NotificationMapper notificationMapper,
-                                    EmailService emailService,
+    public NotificationServiceImpl(NotificationRepository notificationRepository, NotificationMapper notificationMapper,
+                                   EmailService emailService,
                                    NotificationHistoryRepository notificationHistoryRepository) {
-        this.notificationTypeRepository = notificationTypeRepository;
+        this.notificationRepository = notificationRepository;
         this.notificationMapper = notificationMapper;
         this.emailService = emailService;
         this.notificationHistoryRepository = notificationHistoryRepository;
     }
 
     @Override
-    public NotificationTypeDto addNotificationType(NotificationTypeCreateDto notificationTypeCreateDto) {
+    public NotificationDto addNotification(NotificationCreateDto notificationCreateDto) {
+        Notification notification = notificationMapper.notificationCreateDtoToNotification(notificationCreateDto);
+        notificationRepository.save(notification);
+        return notificationMapper.notificationToNotificationDto(notification);
+    }
 
-        NotificationType notificationType = notificationMapper.notifTypeCreateDtoToNotifType(notificationTypeCreateDto);
-        notificationTypeRepository.save(notificationType);
-        return notificationMapper.notifTypeToNotifTypeDto(notificationType);
+    @Override
+    public NotificationDto updateNotification(Long id, NotificationCreateDto notificationCreateDto) {
+        Notification notification = notificationRepository.findNotificationById(id);
+        notification.setMessage(notificationCreateDto.getMessage());
+        notification.setName(notificationCreateDto.getName());
+        return notificationMapper.notificationToNotificationDto(notificationRepository.save(notification));
+    }
+
+    @Override
+    public void deleteNotificationById(Long id) {
+        notificationRepository.deleteById(id);
     }
 
 
     @Override
     public ResponseEntity<Void> sendMail(ClientDto clientDto, String notificationName) {
-        NotificationType notificationType = notificationTypeRepository.findNotificationTypeByName(notificationName);
+        Notification notification = notificationRepository.findNotificationByName(notificationName);
 
-        String content = notificationType.getMessage();
+        String content = notification.getMessage();
 
         content = content.replace("%firstname", clientDto.getFirstName());
         content = content.replace("%lastname", clientDto.getLastName());
@@ -66,7 +78,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public ResponseEntity<Void> sendReservationMail(BookingClientDto bookingClientDto, String notificationName) {
-        NotificationType notificationType = notificationTypeRepository.findNotificationTypeByName(notificationName);
+        Notification notificationType = notificationRepository.findNotificationByName(notificationName);
         String content = notificationType.getMessage();
 
         content = content.replace("%firstname", bookingClientDto.getFirstName());

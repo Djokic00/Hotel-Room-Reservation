@@ -1,12 +1,7 @@
 package sk.hotelnotificationservice.dto;
 
-import javax.validation.constraints.NotNull;
-
-public class NotificationTypeCreateDto {
-
-    @NotNull
+public class NotificationDto {
     private String name;
-    @NotNull
     private String message;
 
     public String getName() {

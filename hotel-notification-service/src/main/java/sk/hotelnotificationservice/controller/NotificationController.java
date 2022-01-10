@@ -3,14 +3,11 @@ package sk.hotelnotificationservice.controller;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import sk.hotelnotificationservice.dto.NotificationTypeCreateDto;
-import sk.hotelnotificationservice.dto.NotificationTypeDto;
+import org.springframework.web.bind.annotation.*;
+import sk.hotelnotificationservice.dto.NotificationCreateDto;
+import sk.hotelnotificationservice.dto.NotificationDto;
 import sk.hotelnotificationservice.mapper.NotificationMapper;
-import sk.hotelnotificationservice.repository.NotificationTypeRepository;
+import sk.hotelnotificationservice.repository.NotificationRepository;
 import sk.hotelnotificationservice.service.NotificationService;
 
 import javax.validation.Valid;
@@ -21,20 +18,36 @@ public class NotificationController {
 
     private NotificationService notificationService;
     private NotificationMapper notificationMapper;
-    private NotificationTypeRepository notificationTypeRepository;
+    private NotificationRepository notificationRepository;
 
     public NotificationController(NotificationService notificationService, NotificationMapper notificationMapper,
-                                  NotificationTypeRepository notificationTypeRepository) {
+                                  NotificationRepository notificationRepository) {
         this.notificationService = notificationService;
         this.notificationMapper = notificationMapper;
-        this.notificationTypeRepository = notificationTypeRepository;
+        this.notificationRepository = notificationRepository;
     }
 
     @ApiOperation(value = "Add notification")
-    @PostMapping("/notificationType")
-    public ResponseEntity<NotificationTypeDto> saveNotificationType(@RequestBody @Valid
-                                                                      NotificationTypeCreateDto notificationTypeCreateDto) {
-        return new ResponseEntity<>(notificationService.addNotificationType(notificationTypeCreateDto), HttpStatus.CREATED);
+    @PostMapping("/saveNotification")
+    public ResponseEntity<NotificationDto> saveNotificationType(@RequestBody @Valid
+                                                                        NotificationCreateDto notificationCreateDto) {
+        return new ResponseEntity<>(notificationService.addNotification(notificationCreateDto), HttpStatus.CREATED);
     }
+
+    @ApiOperation(value = "Update notification")
+    @PostMapping("/{id}/updateNotification")
+    public ResponseEntity<NotificationDto> updateNotification(@PathVariable("id") Long id, @RequestBody @Valid
+            NotificationCreateDto notificationCreateDto) {
+        return new ResponseEntity<>(notificationService.updateNotification(id, notificationCreateDto), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Delete notification")
+    @DeleteMapping("/{id}/deleteNotification")
+    public ResponseEntity<?> deleteNotification(@PathVariable("id") Long id) {
+        notificationService.deleteNotificationById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 
 }
