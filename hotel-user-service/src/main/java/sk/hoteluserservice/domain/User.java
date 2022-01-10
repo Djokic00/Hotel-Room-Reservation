@@ -20,9 +20,9 @@ public class User {
     private String lastName;
 
    // @JsonFormat(pattern="yyyy-MM-dd")
-    private Date birthday;
+    //private Date birthday;
 
-    private Integer contact;
+    private String contact;
     private Boolean isBanned;
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
@@ -80,19 +80,19 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
+//    public Date getBirthday() {
+//        return birthday;
+//    }
+//
+//    public void setBirthday(Date birthday) {
+//        this.birthday = birthday;
+//    }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public Integer getContact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(Integer contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 
@@ -127,4 +127,9 @@ public class User {
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
 }
+

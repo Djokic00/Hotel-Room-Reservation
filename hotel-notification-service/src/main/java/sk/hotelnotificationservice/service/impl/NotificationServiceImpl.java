@@ -63,4 +63,31 @@ public class NotificationServiceImpl implements NotificationService {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<Void> sendReservationMail(BookingClientDto bookingClientDto, String notificationName) {
+        NotificationType notificationType = notificationTypeRepository.findNotificationTypeByName(notificationName);
+        String content = notificationType.getMessage();
+
+        content = content.replace("%firstname", bookingClientDto.getFirstName());
+        content = content.replace("%lastname", bookingClientDto.getLastName());
+        content = content.replace("%username", bookingClientDto.getUsername());
+        content = content.replace("%email", bookingClientDto.getEmail());
+        content = content.replace((CharSequence) "%arrival", (CharSequence) bookingClientDto.getArrival());
+        content = content.replace((CharSequence) "%departure", (CharSequence) bookingClientDto.getDeparture());
+        content = content.replace("%city", bookingClientDto.getCity());
+        content = content.replace("%hotelname", bookingClientDto.getHotelName());
+        content = content.replace("%roomtype", bookingClientDto.getRoomType());
+        content = content.replace("%email", bookingClientDto.getEmail());
+        content = content.replace((CharSequence) "%birthday", (CharSequence) bookingClientDto.getBirthday());
+        content = content.replace("%passportnumber", bookingClientDto.getPassportNumber());
+        content = content.replace("%contact", bookingClientDto.getContact());
+
+        emailService.sendSimpleMessage(bookingClientDto.getEmail(), notificationName, content);
+
+        NotificationHistory notificationHistory = new NotificationHistory(bookingClientDto.getEmail(), content, notificationName);
+        notificationHistoryRepository.save(notificationHistory);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -13,6 +13,7 @@ public class BookingCreateDto {
     private String hotelName;
     @NotBlank
     private String city;
+    private String username;
 
     public Date getArrival() {
         return arrival;
@@ -52,5 +53,13 @@ public class BookingCreateDto {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

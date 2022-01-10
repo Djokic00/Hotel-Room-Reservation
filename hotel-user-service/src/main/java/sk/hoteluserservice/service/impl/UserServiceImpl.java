@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private JmsTemplate jmsTemplate;
     private MessageHelper messageHelper;
     private String clientRegisterDestination;
+    private String findEmailDestination;
 
 //    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService) {
 //        this.userRepository = userRepository;
@@ -47,7 +48,8 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService,
                            ClientRepository clientRepository, ManagerRepository managerRepository,
                            ClientStatusRepository clientStatusRepository,
-                           JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination) {
+                           JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination,
+                           @Value("${destination.findEmail}") String findEmailDestination ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
         this.jmsTemplate = jmsTemplate;
         this.clientRegisterDestination = clientRegisterDestination;
         this.clientStatusRepository = clientStatusRepository;
+        this.findEmailDestination = findEmailDestination;
     }
 
     @Override
@@ -223,12 +226,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void incrementReservation(String username) {
+        Client client = clientRepository.findUserByUsername(username);
+        client.setNumberOfReservations(client.getNumberOfReservations() + 1);
+        clientRepository.save(client);
+        ClientDto clientDto = userMapper.clientToClientDto(client);
+        jmsTemplate.convertAndSend(findEmailDestination, messageHelper.createTextMessage(clientDto));
+    }
+
+    @Override
     public ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto) {
         ClientStatus clientStatus = clientStatusRepository.getById(id);
         clientStatus.setRank(discountCreateDto.getRank());
         clientStatus.setDiscount(discountCreateDto.getDiscount());
         return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
     }
+
 
 
 }

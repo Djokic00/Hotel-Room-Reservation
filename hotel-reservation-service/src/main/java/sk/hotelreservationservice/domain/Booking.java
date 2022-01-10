@@ -6,19 +6,19 @@ import java.sql.Date;
 @Entity
 public class Booking {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-       // private String client; kako izvuci ulogovanog korisnika?
-       // private String price; racuna se broj_nocenja*cena*(100-popust)/100
-        private Date arrival;
-        private Date departure;
-        private String hotelName;
-        private String city;
+    private String username;
+   // private String price; racuna se broj_nocenja*cena*(100-popust)/100
+    private Date arrival;
+    private Date departure;
+    private String hotelName;
+    private String city;
 
-        @ManyToOne(optional = false)
-        private Rooms rooms;
+    @ManyToOne(optional = false)
+    private Rooms rooms;
 
     public Long getId() {
         return id;
@@ -83,5 +83,13 @@ public class Booking {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

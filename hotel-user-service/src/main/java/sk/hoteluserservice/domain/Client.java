@@ -8,7 +8,7 @@ public class Client extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer passportNumber;
+    private String passportNumber;
     private Integer numberOfReservations;
 
     @Override
@@ -21,11 +21,11 @@ public class Client extends User {
         this.id = id;
     }
 
-    public Integer getPassportNumber() {
+    public String getPassportNumber() {
         return passportNumber;
     }
 
-    public void setPassportNumber(Integer passportNumber) {
+    public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
     }
 

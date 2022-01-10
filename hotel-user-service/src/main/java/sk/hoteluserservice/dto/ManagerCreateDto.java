@@ -22,10 +22,10 @@ public class ManagerCreateDto {
     private String password;
 //    @NotBlank
 //    private Date birthday;
-    @NotNull
-    private Integer contact;
     @NotBlank
-    private String hotelname;
+    private String contact;
+    @NotBlank
+    private String hotelName;
 //    @NotBlank
 //    private Date hiringDate;
 
@@ -77,21 +77,21 @@ public class ManagerCreateDto {
 //        this.birthday = birthday;
 //    }
 
-    public Integer getContact() {
+
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(Integer contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 
-
-    public String getHotelname() {
-        return hotelname;
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setHotelname(String hotelname) {
-        this.hotelname = hotelname;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
 //    public Date getHiringDate() {

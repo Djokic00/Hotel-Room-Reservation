@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import sk.hoteluserservice.domain.Client;
-import sk.hoteluserservice.domain.User;
 import sk.hoteluserservice.dto.*;
-import sk.hoteluserservice.exception.NotFoundException;
 import sk.hoteluserservice.listener.helper.MessageHelper;
 import sk.hoteluserservice.mapper.UserMapper;
 import sk.hoteluserservice.repository.UserRepository;
@@ -22,7 +20,6 @@ import sk.hoteluserservice.security.CheckSecurity;
 import sk.hoteluserservice.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")

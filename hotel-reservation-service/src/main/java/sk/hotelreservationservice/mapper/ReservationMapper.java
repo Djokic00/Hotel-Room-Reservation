@@ -41,8 +41,8 @@ public class ReservationMapper {
     public RoomsDto roomsToRoomsDto(Rooms rooms) {
         RoomsDto roomsDto = new RoomsDto();
         roomsDto.setHotelName(rooms.getHotel().getHotelName());
-        roomsDto.setFirstNo(rooms.getFirstNo());
-        roomsDto.setLastNo(rooms.getLastNo());
+        roomsDto.setFirstNo(rooms.getFirstRoomNumber());
+        roomsDto.setLastNo(rooms.getLastRoomNumber());
         roomsDto.setType(rooms.getType());
         roomsDto.setPrice(rooms.getPrice());
        // roomsDto.setAvailableRooms(rooms.getAvailableRooms());
@@ -51,8 +51,8 @@ public class ReservationMapper {
 
     public Rooms roomsCreateDtoToRooms(RoomsCreateDto roomsCreateDto) {
         Rooms rooms = new Rooms();
-        rooms.setFirstNo(roomsCreateDto.getFirstNo());
-        rooms.setLastNo(roomsCreateDto.getLastNo());
+        rooms.setFirstRoomNumber(roomsCreateDto.getFirstNo());
+        rooms.setLastRoomNumber(roomsCreateDto.getLastNo());
         rooms.setType(roomsCreateDto.getType());
         rooms.setPrice(roomsCreateDto.getPrice());
         rooms.setHotel(hotelRepository.findHotelByHotelName(roomsCreateDto.getHotelName()));

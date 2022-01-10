@@ -10,8 +10,8 @@ public class Rooms {
     private Long id;
     private String type;
     private String price;
-    private Integer firstNo;
-    private Integer lastNo;
+    private Integer firstRoomNumber;
+    private Integer lastRoomNumber;
     //private Integer availableRooms;
 
     @ManyToOne(optional = false)
@@ -41,20 +41,20 @@ public class Rooms {
         this.price = price;
     }
 
-    public Integer getFirstNo() {
-        return firstNo;
+    public Integer getFirstRoomNumber() {
+        return firstRoomNumber;
     }
 
-    public void setFirstNo(Integer firstNo) {
-        this.firstNo = firstNo;
+    public void setFirstRoomNumber(Integer firstRoomNumber) {
+        this.firstRoomNumber = firstRoomNumber;
     }
 
-    public Integer getLastNo() {
-        return lastNo;
+    public Integer getLastRoomNumber() {
+        return lastRoomNumber;
     }
 
-    public void setLastNo(Integer lastNo) {
-        this.lastNo = lastNo;
+    public void setLastRoomNumber(Integer lastRoomNumber) {
+        this.lastRoomNumber = lastRoomNumber;
     }
 
     public Hotel getHotel() {

@@ -22,4 +22,5 @@ public interface UserService {
     ClientStatusDto findDiscount(Long id);
     ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
     ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
+    void incrementReservation(String username);
 }

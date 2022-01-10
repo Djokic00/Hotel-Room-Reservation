@@ -9,5 +9,5 @@ public interface ReservationService {
     BookingDto addBooking(BookingCreateDto bookingCreateDto);
     Integer unavailableRooms(BookingCreateDto bookingCreateDto);
     Integer availableRooms(BookingCreateDto bookingCreateDto);
-
+    void forwardClientAndBooking(ClientDto clientDto);
 }

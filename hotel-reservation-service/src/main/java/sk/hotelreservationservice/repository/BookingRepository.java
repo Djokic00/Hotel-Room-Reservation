@@ -5,4 +5,5 @@ import sk.hotelreservationservice.domain.Booking;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
+    Booking findBookingByUsername(String username);
 }

@@ -25,14 +25,14 @@ public class UserMapper {
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setUsername(user.getUsername());
-        userDto.setBithday(user.getBirthday());
+        //userDto.setBithday(user.getBirthday());
 
         return userDto;
     }
 
     public ClientDto clientToClientDto(Client client) {
         ClientDto clientDto = new ClientDto();
-        clientDto.setBirthday(client.getBirthday());
+       // clientDto.setBirthday(client.getBirthday());
         clientDto.setContact(client.getContact());
         clientDto.setEmail(client.getEmail());
         clientDto.setFirstName(client.getFirstName());
@@ -53,7 +53,7 @@ public class UserMapper {
         client.setLastName(clientCreateDto.getLastName());
         client.setUsername(clientCreateDto.getUsername());
         client.setPassword(clientCreateDto.getPassword());
-        client.setBirthday(clientCreateDto.getBirthday());
+        //client.setBirthday(clientCreateDto.getBirthday());
         client.setContact(clientCreateDto.getContact());
         client.setPassportNumber(clientCreateDto.getPassportNumber());
         client.setRole(roleRepository.findRoleByName("ROLE_CLIENT").get());
@@ -86,7 +86,7 @@ public class UserMapper {
         manager.setPassword(managerCreateDto.getPassword());
        // manager.setBirthday(managerCreateDto.getBirthday());
         manager.setContact(managerCreateDto.getContact());
-        manager.setHotelName(managerCreateDto.getHotelname());
+        manager.setHotelName(managerCreateDto.getHotelName());
 //        manager.setHiringDate(managerCreateDto.getHiringDate());
         manager.setRole(roleRepository.findRoleByName("ROLE_MANAGER").get());
         manager.setBanned(false);

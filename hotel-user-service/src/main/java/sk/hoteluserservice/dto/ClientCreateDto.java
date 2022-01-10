@@ -20,10 +20,10 @@ public class ClientCreateDto {
     @Length(min = 8, max = 20)
     private String password;
     private Date birthday;
-    @NotNull
-    private Integer contact;
-    @NotNull
-    private Integer passportNumber;
+    @NotBlank
+    private String contact;
+    @NotBlank
+    private String passportNumber;
 
 
     public String getEmail() {
@@ -74,19 +74,19 @@ public class ClientCreateDto {
         this.birthday = birthday;
     }
 
-    public Integer getContact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(Integer contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 
-    public Integer getPassportNumber() {
+    public String getPassportNumber() {
         return passportNumber;
     }
 
-    public void setPassportNumber(Integer passportNumber) {
+    public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
     }
 }

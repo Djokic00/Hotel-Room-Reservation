@@ -10,8 +10,8 @@ public class ClientDto {
     private String firstName;
     private String lastName;
     private Date birthday;
-    private Integer contact;
-    private Integer passportNumber;
+    private String contact;
+    private String passportNumber;
     private Integer numberOfReservations;
     private String verificationCode;
     private boolean enabled;
@@ -64,20 +64,21 @@ public class ClientDto {
         this.birthday = birthday;
     }
 
-    public Integer getContact() {
-        return contact;
-    }
 
-    public void setContact(Integer contact) {
-        this.contact = contact;
-    }
-
-    public Integer getPassportNumber() {
+    public String getPassportNumber() {
         return passportNumber;
     }
 
-    public void setPassportNumber(Integer passportNumber) {
+    public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public Integer getNumberOfReservations() {

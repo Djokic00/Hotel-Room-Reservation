@@ -9,7 +9,7 @@ public class ManagerDto {
     private String firstName;
     private String lastName;
     // private Date birthday;
-    private Integer contact;
+    private String contact;
     private String hotelName;
     // date
 
@@ -54,11 +54,11 @@ public class ManagerDto {
         this.lastName = lastName;
     }
 
-    public Integer getContact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(Integer contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 

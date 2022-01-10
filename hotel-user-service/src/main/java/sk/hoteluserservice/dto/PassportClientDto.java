@@ -1,16 +1,16 @@
 package sk.hoteluserservice.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class PassportClientDto {
-    @NotNull
-    private Integer passportNumber;
+    @NotBlank
+    private String passportNumber;
 
-    public Integer getPassportNumber() {
+    public String getPassportNumber() {
         return passportNumber;
     }
 
-    public void setPassportNumber(Integer passportNumber) {
+    public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
     }
 }
