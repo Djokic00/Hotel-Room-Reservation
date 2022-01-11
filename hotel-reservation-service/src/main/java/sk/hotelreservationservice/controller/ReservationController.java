@@ -1,11 +1,14 @@
 package sk.hotelreservationservice.controller;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.hotelreservationservice.dto.*;
 import sk.hotelreservationservice.service.ReservationService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -61,6 +64,19 @@ public class ReservationController {
                                                        BookingCreateDto bookingCreateDto) {
         return new ResponseEntity<>(reservationService.availableRooms(bookingCreateDto), HttpStatus.CREATED);
     }
+
+    @ApiOperation(value = "Find comments")
+    @GetMapping("/comment/findAll")
+    public ResponseEntity<Page<CommentDto>> findAll(@PathVariable("id") Long id, @ApiIgnore Pageable pageable) {
+        return new ResponseEntity<>(reservationService.findAllByHotelId(id, pageable), HttpStatus.OK);
+    }
+    @ApiOperation(value = "Add comment")
+    @PostMapping("/comment/add")
+    public ResponseEntity<CommentDto> add(@PathVariable("id") Long id, @RequestBody @Valid CommentCreateDto commentCreateDto) {
+        return new ResponseEntity<>(reservationService.addCommentOnHotel(id, commentCreateDto), HttpStatus.OK);
+    }
+
+
 
 
 

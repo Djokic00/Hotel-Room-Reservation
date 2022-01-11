@@ -1,6 +1,8 @@
 package sk.hotelreservationservice.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import sk.hotelreservationservice.domain.Booking;
+import sk.hotelreservationservice.domain.Comment;
 import sk.hotelreservationservice.domain.Hotel;
 import sk.hotelreservationservice.domain.Rooms;
 import sk.hotelreservationservice.dto.*;
 import sk.hotelreservationservice.listener.helper.MessageHelper;
 import sk.hotelreservationservice.mapper.ReservationMapper;
 import sk.hotelreservationservice.repository.BookingRepository;
+import sk.hotelreservationservice.repository.CommentRepository;
 import sk.hotelreservationservice.repository.HotelRepository;
 import sk.hotelreservationservice.repository.RoomsRepository;
 import sk.hotelreservationservice.service.ReservationService;
@@ -42,6 +46,7 @@ public class ReservationServiceImpl implements ReservationService {
     private MessageHelper messageHelper;
     private String forwardClientBookingDestination;
     private RestTemplate userServiceRestTemplate;
+    private CommentRepository commentRepository;
 
     public ReservationServiceImpl(ReservationMapper reservationMapper,
                                   HotelRepository hotelRepository, RoomsRepository roomsRepository,
@@ -49,7 +54,7 @@ public class ReservationServiceImpl implements ReservationService {
                                   JmsTemplate jmsTemplate, @Value("${destination.bookingNumber}") String bookingDestination,
                                   @Value("${destination.forwardClientBooking}") String forwardClientBookingDestination,
                                   MessageHelper messageHelper,
-                                  RestTemplate userServiceClientConfiguration) {
+                                  RestTemplate userServiceClientConfiguration, CommentRepository commentRepository) {
         this.reservationMapper = reservationMapper;
         this.hotelRepository = hotelRepository;
         this.roomsRepository = roomsRepository;
@@ -59,6 +64,7 @@ public class ReservationServiceImpl implements ReservationService {
         this.forwardClientBookingDestination = forwardClientBookingDestination;
         this.messageHelper = messageHelper;
         this.userServiceRestTemplate = userServiceClientConfiguration;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -151,4 +157,19 @@ public class ReservationServiceImpl implements ReservationService {
         if (clientQueueDto.getIncrement()==false) bookingRepository.delete(booking);
         jmsTemplate.convertAndSend(forwardClientBookingDestination, messageHelper.createTextMessage(bookingClientDto));
     }
+
+    @Override
+    public Page<CommentDto> findAllByHotelId(Long hotelId, Pageable pageable) {
+        return commentRepository.findAllByHotel_Id(hotelId, pageable)
+                .map(reservationMapper::commentToCommentDto);
+    }
+
+    @Override
+    public CommentDto addCommentOnHotel(Long hotelId, CommentCreateDto commentCreateDto) {
+        Hotel hotel = hotelRepository.findHotelById(hotelId);
+        Comment comment = commentRepository
+                .save(reservationMapper.commentCreateDtoToComment(commentCreateDto, hotel));
+        return reservationMapper.commentToCommentDto(comment);
+    }
+
 }

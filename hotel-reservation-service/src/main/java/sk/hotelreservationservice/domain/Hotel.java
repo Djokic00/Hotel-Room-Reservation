@@ -1,8 +1,13 @@
 package sk.hotelreservationservice.domain;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(indexes = @Index(name = "index", columnList = "hotelName, city", unique = true))
 public class Hotel {
 
@@ -13,6 +18,8 @@ public class Hotel {
     private String description;
     private Integer numberOfRooms;
     private String city;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotel", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -52,5 +59,13 @@ public class Hotel {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

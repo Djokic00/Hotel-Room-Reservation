@@ -3,6 +3,7 @@ package sk.hotelreservationservice.mapper;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.stereotype.Component;
 import sk.hotelreservationservice.domain.Booking;
+import sk.hotelreservationservice.domain.Comment;
 import sk.hotelreservationservice.domain.Hotel;
 import sk.hotelreservationservice.domain.Rooms;
 import sk.hotelreservationservice.dto.*;
@@ -79,6 +80,25 @@ public class ReservationMapper {
         booking.setCity(bookingCreateDto.getCity());
         booking.setUsername(bookingCreateDto.getUsername());
         return booking;
+    }
+
+    public CommentDto commentToCommentDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setId(comment.getId());
+        commentDto.setUsername(comment.getUsername());
+        commentDto.setHotelRating(comment.getHotelRating());
+        commentDto.setText(comment.getText());
+
+        return commentDto;
+    }
+
+    public Comment commentCreateDtoToComment(CommentCreateDto commentCreateDto, Hotel hotel) {
+        Comment comment = new Comment();
+        comment.setText(commentCreateDto.getText());
+        comment.setUsername(commentCreateDto.getUsername());
+        comment.setHotelRating(commentCreateDto.getHotelRating());
+        comment.setHotel(hotel);
+        return comment;
     }
 
 
