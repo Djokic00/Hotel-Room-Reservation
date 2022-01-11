@@ -3,10 +3,8 @@ package sk.hoteluserservice.listener;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import sk.hoteluserservice.dto.ClientBookingDto;
-import sk.hoteluserservice.dto.IncrementBookingDto;
 import sk.hoteluserservice.listener.helper.MessageHelper;
 import sk.hoteluserservice.service.UserService;
-
 import javax.jms.JMSException;
 import javax.jms.Message;
 

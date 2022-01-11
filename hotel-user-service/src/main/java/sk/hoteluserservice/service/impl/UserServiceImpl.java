@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private MessageHelper messageHelper;
     private String clientRegisterDestination;
     private String findEmailDestination;
+    private String resetPasswordDestination;
 
 //    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService) {
 //        this.userRepository = userRepository;
@@ -49,7 +50,8 @@ public class UserServiceImpl implements UserService {
                            ClientRepository clientRepository, ManagerRepository managerRepository,
                            ClientStatusRepository clientStatusRepository,
                            JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination,
-                           @Value("${destination.findEmail}") String findEmailDestination, MessageHelper messageHelper ) {
+                           @Value("${destination.findEmail}") String findEmailDestination, MessageHelper messageHelper,
+                           @Value("${destination.resetPassword}") String resetPasswordDestination) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
@@ -60,6 +62,7 @@ public class UserServiceImpl implements UserService {
         this.clientStatusRepository = clientStatusRepository;
         this.findEmailDestination = findEmailDestination;
         this.messageHelper = messageHelper;
+        this.resetPasswordDestination = resetPasswordDestination;
     }
 
     @Override
@@ -246,6 +249,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
     }
 
-
-
+    @Override
+    public void resetPassword(String email) {
+        ClientQueueDto clientQueueDto = new ClientQueueDto();
+        clientQueueDto.setEmail(email);
+        clientQueueDto.setUsername(clientRepository.findUserByEmail(email).getUsername());
+        jmsTemplate.convertAndSend(resetPasswordDestination, messageHelper.createTextMessage(clientQueueDto));
+    }
 }
