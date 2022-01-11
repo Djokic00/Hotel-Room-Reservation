@@ -200,17 +200,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ClientStatusDto findDiscount(String username) {
-        Client client = clientRepository.findUserByUsername(username);
-//                .orElseThrow(() -> new NotFoundException(String
-//                        .format("User with id: %d not found.", username)));
-        List<ClientStatus> clientStatusList = clientStatusRepository.findAll();
-        //get discount
-        ClientStatus status = clientStatusList.stream()
-                .filter(clientStatus -> clientStatus.getMaxNumberOfReservations() >= client.getNumberOfReservations()
-                        && clientStatus.getMinNumberOfReservations() <= client.getNumberOfReservations())
-                .findAny()
-                .get();
-        return new ClientStatusDto(status.getDiscount(), status.getRank());
+//        Client client = clientRepository.findUserByUsername(username);
+////                .orElseThrow(() -> new NotFoundException(String
+////                        .format("User with id: %d not found.", username)));
+//        List<ClientStatus> clientStatusList = clientStatusRepository.findAll();
+//        //get discount
+//        ClientStatus status = clientStatusList.stream()
+//                .filter(clientStatus -> clientStatus.getMaxNumberOfReservations() >= client.getNumberOfReservations()
+//                        && clientStatus.getMinNumberOfReservations() <= client.getNumberOfReservations())
+//                .findAny()
+//                .get();
+//        return new ClientStatusDto(status.getDiscount(), status.getRank());
+
+        return new ClientStatusDto(0, "regular");
     }
 
     @Override

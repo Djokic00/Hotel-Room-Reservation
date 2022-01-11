@@ -1,5 +1,6 @@
 package sk.hotelreservationservice.service.impl;
 
+import io.github.resilience4j.retry.Retry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import sk.hotelreservationservice.domain.Comment;
 import sk.hotelreservationservice.domain.Hotel;
 import sk.hotelreservationservice.domain.Rooms;
 import sk.hotelreservationservice.dto.*;
+import sk.hotelreservationservice.exception.NotFoundException;
 import sk.hotelreservationservice.listener.helper.MessageHelper;
 import sk.hotelreservationservice.mapper.ReservationMapper;
 import sk.hotelreservationservice.repository.BookingRepository;
@@ -27,8 +29,6 @@ import sk.hotelreservationservice.userservice.UserServiceClientConfiguration;
 import sk.hotelreservationservice.userservice.dto.ClientBookingDto;
 import sk.hotelreservationservice.userservice.dto.ClientQueueDto;
 import sk.hotelreservationservice.userservice.dto.ClientStatusDto;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -47,6 +47,7 @@ public class ReservationServiceImpl implements ReservationService {
     private String forwardClientBookingDestination;
     private RestTemplate userServiceRestTemplate;
     private CommentRepository commentRepository;
+    private Retry userServiceRetry;
 
     public ReservationServiceImpl(ReservationMapper reservationMapper,
                                   HotelRepository hotelRepository, RoomsRepository roomsRepository,
@@ -54,7 +55,8 @@ public class ReservationServiceImpl implements ReservationService {
                                   JmsTemplate jmsTemplate, @Value("${destination.bookingNumber}") String bookingDestination,
                                   @Value("${destination.forwardClientBooking}") String forwardClientBookingDestination,
                                   MessageHelper messageHelper,
-                                  RestTemplate userServiceClientConfiguration, CommentRepository commentRepository) {
+                                  RestTemplate userServiceClientConfiguration, CommentRepository commentRepository,
+                                  Retry userServiceRetry) {
         this.reservationMapper = reservationMapper;
         this.hotelRepository = hotelRepository;
         this.roomsRepository = roomsRepository;
@@ -65,6 +67,7 @@ public class ReservationServiceImpl implements ReservationService {
         this.messageHelper = messageHelper;
         this.userServiceRestTemplate = userServiceClientConfiguration;
         this.commentRepository = commentRepository;
+        this.userServiceRetry = userServiceRetry;
     }
 
     @Override
@@ -86,27 +89,38 @@ public class ReservationServiceImpl implements ReservationService {
     public BookingDto addBooking(BookingCreateDto bookingCreateDto) {
         Booking booking = reservationMapper.bookingCreateDtoToBooking(bookingCreateDto);
 
-        ResponseEntity<ClientStatusDto> discountDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
-                bookingCreateDto.getUsername() + "/discount", HttpMethod.GET, null, ClientStatusDto.class);
+        ClientStatusDto discountDto = Retry.decorateSupplier(userServiceRetry, () -> getDiscount(bookingCreateDto.getUsername())).get();
 
-        LocalDate start = LocalDate.parse(booking.getArrival().toString()); //???
+//        mora da pronadje cenu za taj tip sobe i za taj hotel i za taj grad
+//        broj_nocenja*cena*(100-popust)/100
+        LocalDate start = LocalDate.parse(booking.getArrival().toString());
         LocalDate end = LocalDate.parse(booking.getDeparture().toString());
-
         long diff = DAYS.between(start, end);
-        String roomprice = roomsRepository.findPriceByHotelCityAndRoomType(booking.getHotelName(),booking.getCity(),booking.getRooms().getType());
-        Double newPrice = diff * Double.parseDouble(roomprice) * (100 - discountDtoResponseEntity.getBody().getDiscount()) / 100;
-//        //mora da pronadje cenu za taj tip sobe i za taj hotel i za taj grad
-//        //broj_nocenja*cena*(100-popust)/100
-//
+
+        String roomPrice = roomsRepository.findPriceByHotelCityAndRoomType(booking.getHotelName(),booking.getCity(),booking.getRooms().getType());
+        Double newPrice = diff * Double.parseDouble(roomPrice) * (100 - discountDto.getDiscount()) / 100;
         booking.setPrice(String.valueOf(newPrice));
+
         bookingRepository.save(booking);
+
+        Booking lastBooking = bookingRepository.findLastBookingByUsername(booking.getUsername());
         ClientBookingDto clientBookingDto = new ClientBookingDto(booking.getUsername());
         clientBookingDto.setIncrement(true);
-        Booking b = bookingRepository.findLastBookingByUsername(booking.getUsername());
-        clientBookingDto.setBookingId(b.getId());
-        System.out.println("clientBookingDto b : " + clientBookingDto.toString());
+        clientBookingDto.setBookingId(lastBooking.getId());
         jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientBookingDto));
         return reservationMapper.bookingToBookingDto(booking);
+    }
+
+    private ClientStatusDto getDiscount(String username) {
+        System.out.println("Getting user with username: " + username);
+        try {
+            return userServiceRestTemplate.exchange("/user/" +
+                    username + "/discount", HttpMethod.GET, null, ClientStatusDto.class).getBody();
+        } catch (HttpClientErrorException e) {
+                throw new NotFoundException(String.format("User with that username: %s not found.", username));
+        } catch (Exception e) {
+            throw new RuntimeException("Internal server error");
+        }
     }
 
     @Override
@@ -139,8 +153,6 @@ public class ReservationServiceImpl implements ReservationService {
     public void forwardClientAndBooking(ClientQueueDto clientQueueDto) {
         // FindBookingByUsernameAndID
         Booking booking = bookingRepository.findBookingById(clientQueueDto.getBookingId());
-        System.out.println(clientQueueDto.getBookingId());
-        System.out.println(booking.toString());
         BookingClientDto bookingClientDto = new BookingClientDto();
         bookingClientDto.setArrival(booking.getArrival());
         bookingClientDto.setDeparture(booking.getDeparture());
@@ -154,7 +166,7 @@ public class ReservationServiceImpl implements ReservationService {
         bookingClientDto.setUsername(clientQueueDto.getUsername());
         bookingClientDto.setIncrement(clientQueueDto.getIncrement());
 
-        if (clientQueueDto.getIncrement()==false) bookingRepository.delete(booking);
+        if (!clientQueueDto.getIncrement()) bookingRepository.delete(booking);
         jmsTemplate.convertAndSend(forwardClientBookingDestination, messageHelper.createTextMessage(bookingClientDto));
     }
 
