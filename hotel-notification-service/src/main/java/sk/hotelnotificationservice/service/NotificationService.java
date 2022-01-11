@@ -1,6 +1,7 @@
 package sk.hotelnotificationservice.service;
 
 import org.springframework.http.ResponseEntity;
+import sk.hotelnotificationservice.domain.NotificationHistory;
 import sk.hotelnotificationservice.dto.*;
 
 public interface NotificationService {
@@ -10,4 +11,5 @@ public interface NotificationService {
     NotificationDto updateNotification(Long id, NotificationCreateDto notificationCreateDto);
     ResponseEntity<Void> sendMail(ClientDto clientDto, String notification);
     ResponseEntity<Void> sendReservationMail(BookingClientDto bookingClientDto, String notification);
+    ResponseEntity<Void> sendReservationReminder(NotificationHistory notificationHistory);
 }

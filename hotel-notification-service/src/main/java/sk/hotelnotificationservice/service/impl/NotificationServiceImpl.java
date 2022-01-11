@@ -97,8 +97,36 @@ public class NotificationServiceImpl implements NotificationService {
 
         emailService.sendSimpleMessage(bookingClientDto.getEmail(), notificationName, content);
 
-        NotificationHistory notificationHistory = new NotificationHistory(bookingClientDto.getEmail(), content, notificationName);
+        //NotificationHistory notificationHistory = new NotificationHistory(bookingClientDto.getEmail(), content, notificationName);
+        NotificationHistory notificationHistory = new NotificationHistory();
+        notificationHistory.setEmail(bookingClientDto.getEmail());
+        notificationHistory.setArrival(bookingClientDto.getArrival());
+        notificationHistory.setNotificationName(notificationName);
+        notificationHistory.setMessage(content);
+
+        if (notificationName.equals("cancel reservation")) notificationHistory.setFlag(1);
+        else notificationHistory.setFlag(0);
         notificationHistoryRepository.save(notificationHistory);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> sendReservationReminder(NotificationHistory notificationHistory) {
+
+        emailService.sendSimpleMessage(notificationHistory.getEmail(), "reservation reminder", notificationHistory.getMessage());
+        notificationHistory.setFlag(1);
+        notificationHistoryRepository.save(notificationHistory);
+
+        NotificationHistory reminder = new NotificationHistory();
+        reminder.setEmail(notificationHistory.getEmail());
+        reminder.setArrival(notificationHistory.getArrival());
+        reminder.setNotificationName("reservation reminder");
+        reminder.setMessage(notificationHistory.getMessage());
+        reminder.setFlag(1);
+
+        notificationHistoryRepository.save(reminder);
+
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
