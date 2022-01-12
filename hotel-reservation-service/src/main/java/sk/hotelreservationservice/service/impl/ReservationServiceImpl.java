@@ -89,7 +89,7 @@ public class ReservationServiceImpl implements ReservationService {
     public BookingDto addBooking(BookingCreateDto bookingCreateDto) {
         Booking booking = reservationMapper.bookingCreateDtoToBooking(bookingCreateDto);
 
-        ClientStatusDto discountDto = Retry.decorateSupplier(userServiceRetry, () -> getDiscount(bookingCreateDto.getUsername())).get();
+        ClientStatusDto discountDto = Retry.decorateSupplier(userServiceRetry, () -> getDiscount(bookingCreateDto.getUserId())).get();
 
 //        mora da pronadje cenu za taj tip sobe i za taj hotel i za taj grad
 //        broj_nocenja*cena*(100-popust)/100
@@ -103,21 +103,26 @@ public class ReservationServiceImpl implements ReservationService {
 
         bookingRepository.save(booking);
 
-        Booking lastBooking = bookingRepository.findLastBookingByUsername(booking.getUsername());
-        ClientBookingDto clientBookingDto = new ClientBookingDto(booking.getUsername());
-        clientBookingDto.setIncrement(true);
-        clientBookingDto.setBookingId(lastBooking.getId());
-        jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientBookingDto));
+        System.out.println(booking.getUserId());
+        Booking lastBooking = bookingRepository.findLastBookingById(booking.getUserId());
+        // Ovde je stajalo ClientBookingDto, a ne ClientQueueDto
+        ClientQueueDto clientQueueDto = new ClientQueueDto();
+        clientQueueDto.setIncrement(true);
+        clientQueueDto.setUserId(lastBooking.getUserId());
+        clientQueueDto.setBookingId(lastBooking.getId());
+        clientQueueDto.setHotelName(lastBooking.getHotelName());
+        clientQueueDto.setCity(lastBooking.getCity());
+        jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientQueueDto));
         return reservationMapper.bookingToBookingDto(booking);
     }
 
-    private ClientStatusDto getDiscount(String username) {
-        System.out.println("Getting user with username: " + username);
+    private ClientStatusDto getDiscount(Long id) {
+        System.out.println("Getting user with id: " + id);
         try {
             return userServiceRestTemplate.exchange("/user/" +
-                    username + "/discount", HttpMethod.GET, null, ClientStatusDto.class).getBody();
+                    id + "/discount", HttpMethod.GET, null, ClientStatusDto.class).getBody();
         } catch (HttpClientErrorException e) {
-                throw new NotFoundException(String.format("User with that username: %s not found.", username));
+                throw new NotFoundException(String.format("User with that id is: %d not found.", id));
         } catch (Exception e) {
             throw new RuntimeException("Internal server error");
         }
@@ -126,10 +131,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public BookingDto removeBooking(BookingCreateDto bookingCreateDto, Long bookingId) {
         Booking booking = reservationMapper.bookingCreateDtoToBooking(bookingCreateDto);
-        ClientBookingDto clientBookingDto = new ClientBookingDto(booking.getUsername());
-        clientBookingDto.setIncrement(false);
-        clientBookingDto.setBookingId(bookingId);
-        jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientBookingDto));
+//        ClientBookingDto clientBookingDto = new ClientBookingDto(booking.getUsername());
+//        clientBookingDto.setIncrement(false);
+//        clientBookingDto.setBookingId(bookingId);
+//        jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientBookingDto));
         return reservationMapper.bookingToBookingDto(booking);
     }
 
@@ -154,6 +159,7 @@ public class ReservationServiceImpl implements ReservationService {
         // FindBookingByUsernameAndID
         Booking booking = bookingRepository.findBookingById(clientQueueDto.getBookingId());
         BookingClientDto bookingClientDto = new BookingClientDto();
+        bookingClientDto.setUserId(booking.getUserId());
         bookingClientDto.setArrival(booking.getArrival());
         bookingClientDto.setDeparture(booking.getDeparture());
         bookingClientDto.setCity(booking.getCity());
@@ -163,8 +169,8 @@ public class ReservationServiceImpl implements ReservationService {
         bookingClientDto.setEmail(clientQueueDto.getEmail());
         bookingClientDto.setFirstName(clientQueueDto.getFirstName());
         bookingClientDto.setLastName(clientQueueDto.getLastName());
-        bookingClientDto.setUsername(clientQueueDto.getUsername());
         bookingClientDto.setIncrement(clientQueueDto.getIncrement());
+        bookingClientDto.setManagerEmail(clientQueueDto.getManagerEmail());
 
         if (!clientQueueDto.getIncrement()) bookingRepository.delete(booking);
         jmsTemplate.convertAndSend(forwardClientBookingDestination, messageHelper.createTextMessage(bookingClientDto));

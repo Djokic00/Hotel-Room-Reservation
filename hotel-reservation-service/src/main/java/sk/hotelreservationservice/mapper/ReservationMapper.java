@@ -78,7 +78,7 @@ public class ReservationMapper {
         booking.setRooms(roomsRepository.findRoomsByType(bookingCreateDto.getRoomType()));
         booking.setHotelName(bookingCreateDto.getHotelName());
         booking.setCity(bookingCreateDto.getCity());
-        booking.setUsername(bookingCreateDto.getUsername());
+        booking.setUserId(bookingCreateDto.getUserId());
         return booking;
     }
 

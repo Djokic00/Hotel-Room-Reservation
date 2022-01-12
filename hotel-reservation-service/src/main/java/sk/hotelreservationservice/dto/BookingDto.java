@@ -3,7 +3,6 @@ package sk.hotelreservationservice.dto;
 import java.sql.Date;
 
 public class BookingDto {
-
     private Long id;
     private Date arrival;
     private Date departure;

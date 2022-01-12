@@ -9,8 +9,9 @@ public interface NotificationService {
     NotificationDto addNotification(NotificationCreateDto notificationCreateDto);
     void deleteNotificationById(Long id);
     NotificationDto updateNotification(Long id, NotificationCreateDto notificationCreateDto);
-    ResponseEntity<Void> sendMail(ClientDto clientDto, String notificationName);
-    ResponseEntity<Void> sendReservationMail(BookingClientDto bookingClientDto, String notificationName);
-    ResponseEntity<Void> sendReservationReminder(NotificationHistory notificationHistory);
-    ResponseEntity<Void> sendResetPasswordMail(ClientDto clientDto, String notificationName);
+    void sendMail(ClientDto clientDto, String notificationName);
+    void sendReservationMail(BookingClientDto bookingClientDto, String notificationName);
+    void sendReservationMailManager(BookingClientDto bookingClientDto, String notificationName);
+    void sendReservationReminder(NotificationHistory notificationHistory);
+    void sendResetPasswordMail(ClientDto clientDto, String notificationName);
 }

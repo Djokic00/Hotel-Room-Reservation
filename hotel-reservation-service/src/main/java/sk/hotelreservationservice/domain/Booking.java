@@ -9,8 +9,7 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String username;
+    private Long userId;
     private String price; // racuna se broj_nocenja*cena*(100-popust)/100
     private Date arrival;
     private Date departure;
@@ -27,7 +26,8 @@ public class Booking {
     public void setId(Long id) {
         this.id = id;
     }
-//
+
+    //
 //    public String getClient() {
 //        return client;
 //    }
@@ -85,25 +85,11 @@ public class Booking {
         this.city = city;
     }
 
-    public String getUsername() {
-        return username;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", price='" + price + '\'' +
-                ", arrival=" + arrival +
-                ", departure=" + departure +
-                ", hotelName='" + hotelName + '\'' +
-                ", city='" + city + '\'' +
-                ", rooms=" + rooms +
-                '}';
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

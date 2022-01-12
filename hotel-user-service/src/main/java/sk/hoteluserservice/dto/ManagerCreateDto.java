@@ -26,6 +26,8 @@ public class ManagerCreateDto {
     private String contact;
     @NotBlank
     private String hotelName;
+    @NotBlank
+    private String city;
 //    @NotBlank
 //    private Date hiringDate;
 
@@ -101,4 +103,13 @@ public class ManagerCreateDto {
 //    public void setHiringDate(Date hiringDate) {
 //        this.hiringDate = hiringDate;
 //    }
+
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 }

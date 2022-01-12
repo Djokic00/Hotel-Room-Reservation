@@ -39,12 +39,6 @@ public class UserServiceImpl implements UserService {
     private String findEmailDestination;
     private String resetPasswordDestination;
 
-//    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService) {
-//        this.userRepository = userRepository;
-//        this.userMapper = userMapper;
-//        this.tokenService = tokenService;
-//    }
-
 
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TokenService tokenService,
                            ClientRepository clientRepository, ManagerRepository managerRepository,
@@ -195,27 +189,29 @@ public class UserServiceImpl implements UserService {
 
         //Map product to DTO and return it
         UserDto userDto = userMapper.userToUserDto(userRepository.save(user));
+
+        // OVO TREBA PROMENITI
         if(!userDto.equals(null)){
-        return true;
-        }else return false;
+            return true;
+        } else return false;
     }
 
 
     @Override
-    public ClientStatusDto findDiscount(String username) {
-//        Client client = clientRepository.findUserByUsername(username);
-////                .orElseThrow(() -> new NotFoundException(String
-////                        .format("User with id: %d not found.", username)));
-//        List<ClientStatus> clientStatusList = clientStatusRepository.findAll();
-//        //get discount
-//        ClientStatus status = clientStatusList.stream()
-//                .filter(clientStatus -> clientStatus.getMaxNumberOfReservations() >= client.getNumberOfReservations()
-//                        && clientStatus.getMinNumberOfReservations() <= client.getNumberOfReservations())
-//                .findAny()
-//                .get();
-//        return new ClientStatusDto(status.getDiscount(), status.getRank());
+    public ClientStatusDto findDiscount(Long id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String
+                .format("User with id: %d not found.", id)));
+        List<ClientStatus> clientStatusList = clientStatusRepository.findAll();
+        //get discount
+        ClientStatus status = clientStatusList.stream()
+                .filter(clientStatus -> clientStatus.getMaxNumberOfReservations() >= client.getNumberOfReservations()
+                        && clientStatus.getMinNumberOfReservations() <= client.getNumberOfReservations())
+                .findAny()
+                .get();
+        return new ClientStatusDto(status.getDiscount(), status.getRank());
 
-        return new ClientStatusDto(0, "regular");
+        //return new ClientStatusDto(0, "regular"); // ovo stoji ako hocemo retry da probamo
     }
 
     @Override
@@ -229,15 +225,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeNumberOfReservations(ClientBookingDto clientBookingDto) {
-        Client client = clientRepository.findUserByUsername(clientBookingDto.getUsername());
-        if (clientBookingDto.getIncrement()) client.setNumberOfReservations(client.getNumberOfReservations() + 1);
+    public void changeNumberOfReservations(ClientQueueDto clientQueueDto) {
+        Client client = clientRepository.findById(clientQueueDto.getUserId())
+                .orElseThrow(() -> new NotFoundException(String
+                        .format("User with that id is not found")));
+
+        if (clientQueueDto.getIncrement()) client.setNumberOfReservations(client.getNumberOfReservations() + 1);
         else client.setNumberOfReservations(client.getNumberOfReservations() - 1);
         clientRepository.save(client);
-        ClientQueueDto clientQueueDto = userMapper.clientToClientQueueDto(client);
-        clientQueueDto.setIncrement(clientBookingDto.getIncrement());
-        clientQueueDto.setBookingId(clientBookingDto.getBookingId());
-        jmsTemplate.convertAndSend(findEmailDestination, messageHelper.createTextMessage(clientQueueDto));
+
+        String hotelName = clientQueueDto.getHotelName();
+        String city = clientQueueDto.getCity();
+        Manager manager = managerRepository.findManagerByHotelNameAndCity(hotelName, city);
+
+        ClientQueueDto newClientQueueDto = userMapper.clientToClientQueueDto(client);
+        newClientQueueDto.setIncrement(clientQueueDto.getIncrement());
+        newClientQueueDto.setBookingId(clientQueueDto.getBookingId());
+        newClientQueueDto.setHotelName(clientQueueDto.getHotelName());
+        newClientQueueDto.setCity(clientQueueDto.getCity());
+        newClientQueueDto.setManagerEmail(manager.getEmail());
+        newClientQueueDto.setManagerId(manager.getId());
+        // messageQueueDto
+        jmsTemplate.convertAndSend(findEmailDestination, messageHelper.createTextMessage(newClientQueueDto));
     }
 
 
@@ -251,9 +260,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(String email) {
-        ClientQueueDto clientQueueDto = new ClientQueueDto();
-        clientQueueDto.setEmail(email);
-        clientQueueDto.setUsername(clientRepository.findUserByEmail(email).getUsername());
-        jmsTemplate.convertAndSend(resetPasswordDestination, messageHelper.createTextMessage(clientQueueDto));
+//        ClientQueueDto clientQueueDto = new ClientQueueDto();
+//        clientQueueDto.setEmail(email);
+//        clientQueueDto.setUsername(clientRepository.findUserByEmail(email).getUsername());
+//        jmsTemplate.convertAndSend(resetPasswordDestination, messageHelper.createTextMessage(clientQueueDto));
     }
 }
