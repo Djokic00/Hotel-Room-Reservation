@@ -104,6 +104,15 @@ public class NotificationServiceImpl implements NotificationService {
         if (notificationName.equals("cancel reservation")) notificationHistory.setFlag(1);
         else notificationHistory.setFlag(0);
         notificationHistoryRepository.save(notificationHistory);
+
+        NotificationHistory notificationHistoryManager = new NotificationHistory();
+        notificationHistoryManager.setEmail(bookingClientDto.getManagerEmail());
+        notificationHistoryManager.setNotificationName(notificationName);
+        notificationHistoryManager.setMessage(managerContent);
+        notificationHistoryManager.setFlag(1);
+
+        notificationHistoryRepository.save(notificationHistoryManager);
+
     }
 
     @Override
