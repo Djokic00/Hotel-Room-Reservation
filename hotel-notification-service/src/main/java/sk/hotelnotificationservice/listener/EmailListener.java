@@ -31,6 +31,7 @@ public class EmailListener {
         ClientDto clientDto = messageHelper.getMessage(message, ClientDto.class);
         notificationService.sendMail(clientDto,"register");
     }
+
     @JmsListener(destination = "${destination.forwardClientBooking}", concurrency = "5-10")
     public void reservationNotification(Message message) throws JMSException {
         BookingClientDto bookingClientDto = messageHelper.getMessage(message, BookingClientDto.class);
@@ -39,5 +40,10 @@ public class EmailListener {
         } else notificationService.sendReservationMail(bookingClientDto,"cancelReservation");
     }
 
+    @JmsListener(destination = "${destination.resetPassword}", concurrency = "5-10")
+    public void resetPasswordNotification(Message message) throws JMSException {
+        ClientDto clientDto = messageHelper.getMessage(message, ClientDto.class);
+        notificationService.sendResetPasswordMail(clientDto, "reset");
+    }
 
 }

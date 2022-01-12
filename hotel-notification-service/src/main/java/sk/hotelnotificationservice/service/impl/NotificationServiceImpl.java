@@ -56,7 +56,6 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public ResponseEntity<Void> sendMail(ClientDto clientDto, String notificationName) {
         Notification notification = notificationRepository.findNotificationByName(notificationName);
-
         String content = notification.getMessage();
 
         content = content.replace("%firstname", clientDto.getFirstName());
@@ -113,7 +112,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public ResponseEntity<Void> sendReservationReminder(NotificationHistory notificationHistory) {
-
         emailService.sendSimpleMessage(notificationHistory.getEmail(), "reservation reminder", notificationHistory.getMessage());
         notificationHistory.setFlag(1);
         notificationHistoryRepository.save(notificationHistory);
@@ -127,7 +125,18 @@ public class NotificationServiceImpl implements NotificationService {
 
         notificationHistoryRepository.save(reminder);
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    @Override
+    public ResponseEntity<Void> sendResetPasswordMail(ClientDto clientDto, String notificationName) {
+        Notification notification = notificationRepository.findNotificationByName(notificationName);
+        String content = notification.getMessage();
+        content = content.replace("%username", clientDto.getUsername());
+        content = content.replace("%email", clientDto.getEmail());
+        emailService.sendSimpleMessage(clientDto.getEmail(), notificationName, content);
+        NotificationHistory notificationHistory = new NotificationHistory(clientDto.getEmail(), content, notificationName);
+        notificationHistoryRepository.save(notificationHistory);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

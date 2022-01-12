@@ -23,4 +23,5 @@ public interface UserService {
     ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
     ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
     void changeNumberOfReservations(ClientBookingDto clientBookingDto);
+    void resetPassword(String username);
 }

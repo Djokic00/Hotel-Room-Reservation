@@ -171,4 +171,11 @@ public class UserController {
         return new ResponseEntity<>(userService.updateRankingSystem(id, clientStatusCreateDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Reset Password")
+    @PutMapping("/{email}/resetPassword")
+    public ResponseEntity<Void> resetPassword(@PathVariable("email") String email) {
+        userService.resetPassword(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
