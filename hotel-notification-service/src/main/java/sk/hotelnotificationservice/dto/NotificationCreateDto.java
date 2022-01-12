@@ -8,6 +8,8 @@ public class NotificationCreateDto {
     private String name;
     @NotNull
     private String message;
+    @NotNull
+    private String managerMessage;
 
     public String getName() {
         return name;
@@ -23,5 +25,13 @@ public class NotificationCreateDto {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getManagerMessage() {
+        return managerMessage;
+    }
+
+    public void setManagerMessage(String managerMessage) {
+        this.managerMessage = managerMessage;
     }
 }

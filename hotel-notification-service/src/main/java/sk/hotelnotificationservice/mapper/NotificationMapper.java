@@ -19,6 +19,7 @@ public class NotificationMapper {
         NotificationDto notificationDto = new NotificationDto();
         notificationDto.setMessage(notification.getMessage());
         notificationDto.setName(notification.getName());
+        notificationDto.setManagerMassage(notification.getManagerMessage());
         return notificationDto;
     }
 
@@ -27,7 +28,7 @@ public class NotificationMapper {
         Notification notificationType=new Notification();
         notificationType.setMessage(notificationCreateDto.getMessage());
         notificationType.setName(notificationCreateDto.getName());
-
+        notificationType.setManagerMessage(notificationCreateDto.getManagerMessage());
         return notificationType;
     }
 

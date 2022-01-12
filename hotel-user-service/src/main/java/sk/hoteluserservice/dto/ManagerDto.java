@@ -11,7 +11,8 @@ public class ManagerDto {
     // private Date birthday;
     private String contact;
     private String hotelName;
-    // date
+    private String city;
+    // datum zaposljavanja
 
 
     public Long getId() {
@@ -68,5 +69,13 @@ public class ManagerDto {
 
     public void setHotelName(String hotelName) {
         this.hotelName = hotelName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

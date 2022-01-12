@@ -3,12 +3,11 @@ import java.sql.Date;
 
 public class BookingClientDto {
 
-    private String username;
+    private Long userId;
     private String email;
     private String firstName;
     private String lastName;
     private Date birthday;
-    private String contact;
     private String passportNumber;
     private Integer numberOfReservations;
 
@@ -19,14 +18,22 @@ public class BookingClientDto {
     private String city;
 
     private Boolean increment;
+    private String managerEmail;
 
-
-    public String getUsername() {
-        return username;
+    public String getManagerEmail() {
+        return managerEmail;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setManagerEmail(String managerEmail) {
+        this.managerEmail = managerEmail;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -61,13 +68,6 @@ public class BookingClientDto {
         this.birthday = birthday;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
 
     public String getPassportNumber() {
         return passportNumber;

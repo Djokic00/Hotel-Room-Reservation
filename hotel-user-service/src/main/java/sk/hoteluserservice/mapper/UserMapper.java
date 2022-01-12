@@ -67,11 +67,11 @@ public class UserMapper {
 
     public ClientQueueDto clientToClientQueueDto(Client client) {
         ClientQueueDto clientQueueDto = new ClientQueueDto();
-        clientQueueDto.setUsername(client.getUsername());
         clientQueueDto.setFirstName(client.getFirstName());
         clientQueueDto.setLastName(client.getLastName());
         clientQueueDto.setEmail(client.getEmail());
         clientQueueDto.setBirthday(client.getBirthday());
+
         return clientQueueDto;
     }
 
@@ -97,6 +97,7 @@ public class UserMapper {
        // manager.setBirthday(managerCreateDto.getBirthday());
         manager.setContact(managerCreateDto.getContact());
         manager.setHotelName(managerCreateDto.getHotelName());
+        manager.setCity(managerCreateDto.getCity());
 //        manager.setHiringDate(managerCreateDto.getHiringDate());
         manager.setRole(roleRepository.findRoleByName("ROLE_MANAGER").get());
         manager.setBanned(false);

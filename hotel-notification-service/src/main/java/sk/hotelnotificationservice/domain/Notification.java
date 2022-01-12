@@ -11,7 +11,15 @@ public class Notification {
     private Long id;
     private String name;
     private String message;
+    private String managerMessage;
 
+    public String getManagerMessage() {
+        return managerMessage;
+    }
+
+    public void setManagerMessage(String managerMessage) {
+        this.managerMessage = managerMessage;
+    }
 
     public String getMessage() {
         return message;

@@ -12,6 +12,7 @@ public class Manager extends User {
     private Long id;
     private String hotelName;
 //    private Date hiringDate;
+    private String city;
 
     @Override
     public Long getId() {
@@ -38,4 +39,13 @@ public class Manager extends User {
 //    public void setHiringDate(Date hiringDate) {
 //        this.hiringDate = hiringDate;
 //    }
+
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 }

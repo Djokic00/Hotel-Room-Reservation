@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class BookingClientDto {
 
-    private String username;
+    private Long userId;
     private String email;
     private String firstName;
     private String lastName;
@@ -18,15 +18,17 @@ public class BookingClientDto {
     private String roomType;
     private String hotelName;
     private String city;
+    private String managerEmail;
+    private String managerId;
 
     private Boolean increment;
 
-    public String getUsername() {
-        return username;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -131,5 +133,21 @@ public class BookingClientDto {
 
     public void setIncrement(Boolean increment) {
         this.increment = increment;
+    }
+
+    public String getManagerEmail() {
+        return managerEmail;
+    }
+
+    public void setManagerEmail(String managerEmail) {
+        this.managerEmail = managerEmail;
+    }
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
     }
 }
