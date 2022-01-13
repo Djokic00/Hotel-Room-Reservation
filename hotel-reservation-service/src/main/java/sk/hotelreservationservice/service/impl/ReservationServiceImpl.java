@@ -26,7 +26,6 @@ import sk.hotelreservationservice.repository.HotelRepository;
 import sk.hotelreservationservice.repository.RoomsRepository;
 import sk.hotelreservationservice.service.ReservationService;
 import sk.hotelreservationservice.userservice.UserServiceClientConfiguration;
-import sk.hotelreservationservice.userservice.dto.ClientBookingDto;
 import sk.hotelreservationservice.userservice.dto.ClientQueueDto;
 import sk.hotelreservationservice.userservice.dto.ClientStatusDto;
 import java.time.LocalDate;
@@ -103,9 +102,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         bookingRepository.save(booking);
 
-        System.out.println(booking.getUserId());
         Booking lastBooking = bookingRepository.findLastBookingById(booking.getUserId());
-        // Ovde je stajalo ClientBookingDto, a ne ClientQueueDto
         ClientQueueDto clientQueueDto = new ClientQueueDto();
         clientQueueDto.setIncrement(true);
         clientQueueDto.setUserId(lastBooking.getUserId());

@@ -3,9 +3,8 @@ package sk.hotelnotificationservice.listener;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import sk.hotelnotificationservice.dto.BookingClientDto;
-import sk.hotelnotificationservice.dto.ClientDto;
+import sk.hotelnotificationservice.dto.UserDto;
 import sk.hotelnotificationservice.listener.helper.MessageHelper;
-import sk.hotelnotificationservice.mapper.NotificationMapper;
 import sk.hotelnotificationservice.service.EmailService;
 import sk.hotelnotificationservice.service.NotificationService;
 
@@ -26,11 +25,24 @@ public class EmailListener {
         this.notificationService = notificationService;
     }
 
+//    @JmsListener(destination = "${destination.registerClient}", concurrency = "5-10")
+//    public void registerClient(Message message) throws JMSException {
+//        ClientDto clientDto = messageHelper.getMessage(message, ClientDto.class);
+//        notificationService.sendMail(clientDto,"register");
+//    }
+
     @JmsListener(destination = "${destination.registerClient}", concurrency = "5-10")
     public void registerClient(Message message) throws JMSException {
-        ClientDto clientDto = messageHelper.getMessage(message, ClientDto.class);
-        notificationService.sendMail(clientDto,"register");
+        UserDto userDto = messageHelper.getMessage(message, UserDto.class);
+        System.out.println(userDto.toString());
+        notificationService.sendVerificationMail(userDto,"register");
     }
+
+//    @JmsListener(destination = "${destination.registerManager}", concurrency = "5-10")
+//    public void registerManager(Message message) throws JMSException {
+//        ManagerDto managerDto = messageHelper.getMessage(message, ManagerDto.class);
+//        notificationService.sendMail(managerDto,"register");
+//    }
 
     @JmsListener(destination = "${destination.forwardClientBooking}", concurrency = "5-10")
     public void reservationNotification(Message message) throws JMSException {
@@ -42,8 +54,8 @@ public class EmailListener {
 
     @JmsListener(destination = "${destination.resetPassword}", concurrency = "5-10")
     public void resetPasswordNotification(Message message) throws JMSException {
-        ClientDto clientDto = messageHelper.getMessage(message, ClientDto.class);
-        notificationService.sendResetPasswordMail(clientDto, "reset");
+        UserDto userDto = messageHelper.getMessage(message, UserDto.class);
+        notificationService.sendResetPasswordMail(userDto, "reset");
     }
 
 }

@@ -11,7 +11,7 @@ public class Manager extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String hotelName;
-//    private Date hiringDate;
+    private Date hiringDate;
     private String city;
 
     @Override
@@ -32,13 +32,13 @@ public class Manager extends User {
         this.hotelName = hotelName;
     }
 
-//    public Date getHiringDate() {
-//        return hiringDate;
-//    }
-//
-//    public void setHiringDate(Date hiringDate) {
-//        this.hiringDate = hiringDate;
-//    }
+    public Date getHiringDate() {
+        return hiringDate;
+    }
+
+    public void setHiringDate(Date hiringDate) {
+        this.hiringDate = hiringDate;
+    }
 
 
     public String getCity() {

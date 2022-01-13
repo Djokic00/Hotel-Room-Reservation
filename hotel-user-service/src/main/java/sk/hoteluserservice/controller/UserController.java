@@ -78,23 +78,29 @@ public class UserController {
         return new ResponseEntity<>(userService.addManager(managerCreateDto), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Register manager with notification")
+    @PostMapping("/registration/activemq/manager")
+    public ResponseEntity<UserDto> registerManager(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
+        userService.addManager(managerCreateDto);
+        userService.registerManager(managerCreateDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Register client with notification")
     @PostMapping("/registration/activemq")
     public ResponseEntity<Void> registerClient(@RequestBody @Valid ClientCreateDto clientCreateDto) {
-        Client client = userMapper.clientCreateDtoToClient(clientCreateDto);
-        ClientDto clientDto = userMapper.clientToClientDto(client);
         userService.addClient(clientCreateDto);
-        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(clientDto));
+        userService.registerClient(clientCreateDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(value = "Login")
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> loginUser(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
-            TokenResponseDto token=userService.login(tokenRequestDto);
-            if (token.getToken()!=null) {
+            TokenResponseDto token = userService.login(tokenRequestDto);
+            if (token.getToken() != null) {
                 return new ResponseEntity<>(token, HttpStatus.OK);
-            }else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
     }
 
@@ -146,7 +152,7 @@ public class UserController {
 
     @GetMapping("/registrationConfirm")
     public String confirmRegistration(@RequestParam("token") String token) {
-        if (userService.verify(token) == true) {
+        if (userService.verify(token)) {
             return "verified";
         } else return "failed";
     }
@@ -170,12 +176,5 @@ public class UserController {
 //                                                      @RequestBody @Valid ClientStatusCreateDto clientStatusCreateDto) {
 //        return new ResponseEntity<>(userService.updateRankingSystem(id, clientStatusCreateDto), HttpStatus.OK);
 //    }
-
-    @ApiOperation(value = "Reset Password")
-    @PutMapping("/{email}/resetPassword")
-    public ResponseEntity<Void> resetPassword(@PathVariable("email") String email) {
-        userService.resetPassword(email);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
 }

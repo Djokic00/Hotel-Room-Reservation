@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private JmsTemplate jmsTemplate;
     private MessageHelper messageHelper;
     private String clientRegisterDestination;
+    private String managerRegistrationDestination;
     private String findEmailDestination;
     private String resetPasswordDestination;
 
@@ -45,7 +46,8 @@ public class UserServiceImpl implements UserService {
                            ClientStatusRepository clientStatusRepository,
                            JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination,
                            @Value("${destination.findEmail}") String findEmailDestination, MessageHelper messageHelper,
-                           @Value("${destination.resetPassword}") String resetPasswordDestination) {
+                           @Value("${destination.resetPassword}") String resetPasswordDestination,
+                           @Value("${destination.registerManager}") String managerRegistrationDestination) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
@@ -57,6 +59,7 @@ public class UserServiceImpl implements UserService {
         this.findEmailDestination = findEmailDestination;
         this.messageHelper = messageHelper;
         this.resetPasswordDestination = resetPasswordDestination;
+        this.managerRegistrationDestination = managerRegistrationDestination;
     }
 
     @Override
@@ -81,7 +84,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerClient(ClientCreateDto clientCreateDto) {
-        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(clientCreateDto));
+        Client client = userMapper.clientCreateDtoToClient(clientCreateDto);
+        ClientDto clientDto = userMapper.clientToClientDto(client);
+        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(clientDto));
+    }
+
+    @Override
+    public void registerManager(ManagerCreateDto managerCreateDto) {
+        Manager manager = userMapper.managerCreateDtoToManager(managerCreateDto);
+        ManagerDto managerDto = userMapper.managerToManagerDto(manager);
+        jmsTemplate.convertAndSend(clientRegisterDestination, messageHelper.createTextMessage(managerDto));
     }
 
     @Override
@@ -93,7 +105,7 @@ public class UserServiceImpl implements UserService {
                         .format("User with username: %s and password: %s not found.", tokenRequestDto.getUsername(),
                                 tokenRequestDto.getPassword())));
         //Create token payload
-        if (user.getBanned()==false && user.isEnabled()==true) {
+        if (user.getBanned() == false && user.isEnabled()) {
             Claims claims = Jwts.claims();
             claims.put("id", user.getId());
             claims.put("role", user.getRole().getName());
@@ -130,15 +142,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updatePassword(Long id, PasswordUserDto passwordUserDto) {
-
-        User user = clientRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Client with id: %d not found.", id)));
-        //Set values to product
-
         user.setPassword(passwordUserDto.getPassword());
 
-        //Map product to DTO and return it
+        UserDto userDto = new UserDto();
+        userDto.setEmail(user.getEmail());
+        userDto.setUsername(user.getUsername());
+        jmsTemplate.convertAndSend(resetPasswordDestination, messageHelper.createTextMessage(userDto));
+
         return userMapper.userToUserDto(userRepository.save(user));
+
     }
 
     @Override
@@ -258,11 +272,4 @@ public class UserServiceImpl implements UserService {
 //        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
 //    }
 
-    @Override
-    public void resetPassword(String email) {
-//        ClientQueueDto clientQueueDto = new ClientQueueDto();
-//        clientQueueDto.setEmail(email);
-//        clientQueueDto.setUsername(clientRepository.findUserByEmail(email).getUsername());
-//        jmsTemplate.convertAndSend(resetPasswordDestination, messageHelper.createTextMessage(clientQueueDto));
-    }
 }
