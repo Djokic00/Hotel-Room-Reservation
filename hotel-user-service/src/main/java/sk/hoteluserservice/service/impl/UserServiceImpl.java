@@ -214,15 +214,15 @@ public class UserServiceImpl implements UserService {
         //return new ClientStatusDto(0, "regular"); // ovo stoji ako hocemo retry da probamo
     }
 
-    @Override
-    public ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto) {
-        ClientStatus clientStatus = clientStatusRepository.getById(id);
-        clientStatus.setRank(clientStatusCreateDto.getRank());
-        clientStatus.setDiscount(clientStatusCreateDto.getDiscount());
-        clientStatus.setMinNumberOfReservations(clientStatusCreateDto.getMinNumberOfReservations());
-        clientStatus.setMaxNumberOfReservations(clientStatusCreateDto.getMaxNumberOfReservations());
-        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
-    }
+//    @Override
+//    public ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto) {
+//        ClientStatus clientStatus = clientStatusRepository.getById(id);
+//        clientStatus.setRank(clientStatusCreateDto.getRank());
+//        clientStatus.setDiscount(clientStatusCreateDto.getDiscount());
+//        clientStatus.setMinNumberOfReservations(clientStatusCreateDto.getMinNumberOfReservations());
+//        clientStatus.setMaxNumberOfReservations(clientStatusCreateDto.getMaxNumberOfReservations());
+//        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
+//    }
 
     @Override
     public void changeNumberOfReservations(ClientQueueDto clientQueueDto) {
@@ -250,13 +250,13 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    public ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto) {
-        ClientStatus clientStatus = clientStatusRepository.getById(id);
-        clientStatus.setRank(discountCreateDto.getRank());
-        clientStatus.setDiscount(discountCreateDto.getDiscount());
-        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
-    }
+//    @Override
+//    public ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto) {
+//        ClientStatus clientStatus = clientStatusRepository.getById(id);
+//        clientStatus.setRank(discountCreateDto.getRank());
+//        clientStatus.setDiscount(discountCreateDto.getDiscount());
+//        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
+//    }
 
     @Override
     public void resetPassword(String email) {

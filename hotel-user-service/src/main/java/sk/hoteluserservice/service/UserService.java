@@ -20,8 +20,8 @@ public interface UserService {
     UserDto unbanUser(Long id, BanUserDto banUserDto);
     Boolean verify(String token);
     ClientStatusDto findDiscount(Long id);
-    ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
-    ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
+//    ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
+//    ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
     void changeNumberOfReservations(ClientQueueDto clientQueueDto);
 //    ovo je pisalo pre nego sto sam ja poceo da jedem govna
 //    void changeNumberOfReservations(ClientBookingDto clientBookingDto);

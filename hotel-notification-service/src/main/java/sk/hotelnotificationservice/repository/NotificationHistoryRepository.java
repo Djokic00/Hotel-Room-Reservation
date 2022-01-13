@@ -11,6 +11,6 @@ import java.util.List;
 public interface NotificationHistoryRepository extends JpaRepository<NotificationHistory, Long> {
 
     @Query(value = "select * from notification_history where notification_name = 'registration' and " +
-            "DATEDIFF(arrival, CAST( GETDATE() AS Date )) <=2 and flag = 0", nativeQuery = true)
+            "datediff(day,cast( getdate() as Date ), arrival) <=2 and flag = 0", nativeQuery = true)
     List<NotificationHistory> findNotificationReservationHistory();
 }

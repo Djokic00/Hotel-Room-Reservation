@@ -48,6 +48,8 @@ public class TestDataRunner implements CommandLineRunner {
         admin.setEmail("admin@gmail.com");
         admin.setUsername("admin");
         admin.setPassword("admin");
+        admin.setBanned(false);
+        admin.setEnabled(true);
         admin.setRole(roleAdmin);
 
         userRepository.save(admin);

@@ -3,10 +3,12 @@ package sk.hotelclientapplication.view;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import sk.hotelclientapplication.ClientApplication;
 import sk.hotelclientapplication.restclient.UserServiceRestClient;
+import sk.hotelclientapplication.restclient.dto.ClientCreateDto;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.sql.Date;
 
 public class RegisterClientView extends JFrame {
 
@@ -86,9 +88,21 @@ public class RegisterClientView extends JFrame {
         register.addActionListener((event) -> {
 
             System.out.println("registrovao sam");
+
+//            ClientView clientView = new ClientView();
+//            clientView.setVisible(true);
+//            this.hide();
             try {
-                userServiceRestClient
-                        .registerClient(emailInput.getText(),firstnameInput.getText(),lastnameInput.getText(),usernameInput.getText(), String.valueOf(passwordInput.getPassword()), birthdayInput.getText(),contactInput.getText(),passportInput.getText());
+                ClientCreateDto clientCreateDto=new ClientCreateDto();
+                clientCreateDto.setEmail(emailInput.getText());
+                clientCreateDto.setFirstName(firstnameInput.getText());
+                clientCreateDto.setLastName(lastnameInput.getText());
+                clientCreateDto.setPassword(String.valueOf(passwordInput.getPassword()));
+                clientCreateDto.setBirthday(Date.valueOf(birthdayInput.getText()));
+                clientCreateDto.setUsername(usernameInput.getText());
+                clientCreateDto.setPassportNumber(passportInput.getText());
+                clientCreateDto.setContact(contactInput.getText());
+                userServiceRestClient.registerClient(clientCreateDto);
             } catch (IOException e) {
                 e.printStackTrace();
             }

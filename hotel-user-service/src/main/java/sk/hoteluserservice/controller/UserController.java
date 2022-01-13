@@ -57,7 +57,7 @@ public class UserController {
                     value = "Sorting criteria in the format: property(,asc|desc). " +
                             "Default sort order is ascending. " +
                             "Multiple sort criteria are supported.")})
-    @GetMapping
+    @GetMapping("/all")
     @CheckSecurity(roles = {"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_CLIENT"})
     public ResponseEntity<Page<UserDto>> getAllUsers(@RequestHeader("Authorization") String authorization,
                                                      Pageable pageable) {
@@ -157,19 +157,19 @@ public class UserController {
         return new ResponseEntity<>(userService.findDiscount(id), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Discount Update")
-    @PutMapping("/{id}/discountUpdate")
-    public ResponseEntity<ClientStatusDto> updateDiscount(@PathVariable("id") Long id,
-                                                          @RequestBody @Valid DiscountCreateDto discountCreateDto) {
-        return new ResponseEntity<>(userService.updateDiscount(id, discountCreateDto), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "Rank System Update")
-    @PutMapping("/{id}/updateRankingSystem")
-    public ResponseEntity<ClientStatusDto> updateRankingSystem(@PathVariable("id") Long id,
-                                                      @RequestBody @Valid ClientStatusCreateDto clientStatusCreateDto) {
-        return new ResponseEntity<>(userService.updateRankingSystem(id, clientStatusCreateDto), HttpStatus.OK);
-    }
+//    @ApiOperation(value = "Discount Update")
+//    @PutMapping("/{id}/discountUpdate")
+//    public ResponseEntity<ClientStatusDto> updateDiscount(@PathVariable("id") Long id,
+//                                                          @RequestBody @Valid DiscountCreateDto discountCreateDto) {
+//        return new ResponseEntity<>(userService.updateDiscount(id, discountCreateDto), HttpStatus.OK);
+//    }
+//
+//    @ApiOperation(value = "Rank System Update")
+//    @PutMapping("/{id}/updateRankingSystem")
+//    public ResponseEntity<ClientStatusDto> updateRankingSystem(@PathVariable("id") Long id,
+//                                                      @RequestBody @Valid ClientStatusCreateDto clientStatusCreateDto) {
+//        return new ResponseEntity<>(userService.updateRankingSystem(id, clientStatusCreateDto), HttpStatus.OK);
+//    }
 
     @ApiOperation(value = "Reset Password")
     @PutMapping("/{email}/resetPassword")

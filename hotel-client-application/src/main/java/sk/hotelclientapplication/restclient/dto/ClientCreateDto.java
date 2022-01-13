@@ -4,25 +4,24 @@ import java.sql.Date;
 
 public class  ClientCreateDto {
 
+    private Date birthday;
+    private String contact;
     private String email;
     private String firstName;
     private String lastName;
-    private String username;
-    private String password;
-    private String birthday;
-    private String contact;
     private String passportNumber;
+    private String password;
+    private String username;
 
-    public ClientCreateDto(String email, String firstName, String lastName, String username, String password, String birthday, String contact, String passportNumber) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-        this.birthday = birthday;
-        this.contact = contact;
-        this.passportNumber = passportNumber;
-    }
+//    private String email;
+//    private String firstName;
+//    private String lastName;
+//    private String username;
+//    private String password;
+//    private Date birthday;
+//    private String contact;
+//    private String passportNumber;
+
 
     public String getEmail() {
         return email;
@@ -64,11 +63,11 @@ public class  ClientCreateDto {
         this.password = password;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 

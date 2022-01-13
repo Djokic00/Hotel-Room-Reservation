@@ -10,6 +10,7 @@ public class ClientApplication extends JFrame {
 
     private String token;
     private LoginView loginView;
+
     //private RegisterClientView registerClientView;
 //    private MoviesView moviesView;
 
@@ -20,6 +21,8 @@ public class ClientApplication extends JFrame {
 
         loginView = new LoginView();
         this.add(loginView, BorderLayout.NORTH);
+
+
 
 //        registerClientView = new RegisterClientView();
 //         this.add(registerClientView, BorderLayout.CENTER);

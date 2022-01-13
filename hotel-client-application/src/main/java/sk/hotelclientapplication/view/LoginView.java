@@ -48,6 +48,12 @@ public class LoginView extends JPanel {
                 this.setVisible(false);
                 ClientApplication.getInstance().setToken(token);
                 System.out.println(token);
+                ClientView clientView = new ClientView();
+                clientView.setVisible(true);
+
+//                ManagerView managerView = new ManagerView();
+//                managerView.setVisible(true);
+                ClientApplication.getInstance().hide();
                 //ClientApplication.getInstance().getMoviesView().init();
 
             } catch (IOException e) {

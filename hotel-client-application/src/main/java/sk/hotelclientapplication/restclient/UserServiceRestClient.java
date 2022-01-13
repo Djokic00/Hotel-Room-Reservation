@@ -1,10 +1,10 @@
 package sk.hotelclientapplication.restclient;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
-import sk.hotelclientapplication.restclient.dto.ClientCreateDto;
-import sk.hotelclientapplication.restclient.dto.TokenRequestDto;
-import sk.hotelclientapplication.restclient.dto.TokenResponseDto;
+import sk.hotelclientapplication.ClientApplication;
+import sk.hotelclientapplication.restclient.dto.*;
 
 import java.io.IOException;
 
@@ -44,16 +44,13 @@ public class UserServiceRestClient {
     }
 
 
-    public String registerClient(String email, String firstname, String lastname, String username,
-                                 String password, String birthday, String contact, String passportnumber)
+    public String registerClient(ClientCreateDto clientCreateDto)
             throws IOException {
-        ClientCreateDto clientCreateDto = new ClientCreateDto(email,firstname,lastname,username,password,
-                birthday,contact,passportnumber);
 
         RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(clientCreateDto));
 
         Request request = new Request.Builder()
-                .url(URL + "/register/client")
+                .url(URL + "/registration/activemq")
                 .post(body)
                 .build();
 
@@ -61,11 +58,37 @@ public class UserServiceRestClient {
 
         Response response = call.execute();
 
-        if (response.code() == 200) {
-            //String json = response.body().string();
-            //TokenResponseDto dto = objectMapper.readValue(json, TokenResponseDto.class);
+        if (response.code() == 201) {
+            String json = response.body().string();
+            UserDto dto = objectMapper.readValue(json, UserDto.class);
 
-           // return dto.getToken();
+            return dto.getEmail();
         } throw new RuntimeException("Registration failed");
+    }
+
+
+    public UserListDto getAllUsers() throws IOException {
+
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        Request request = new Request.Builder()
+                .url(URL + "/movie")
+                .header("Authorization", "Bearer " + ClientApplication.getInstance().getToken())
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            System.out.println("eeej citam usere a ti ih ne vidis");
+
+            return objectMapper.readValue(json, UserListDto.class);
+        }
+
+        throw new RuntimeException("nisam uspeo");
     }
 }

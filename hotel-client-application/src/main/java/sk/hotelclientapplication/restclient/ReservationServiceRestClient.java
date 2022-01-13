@@ -3,6 +3,9 @@ package sk.hotelclientapplication.restclient;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import sk.hotelclientapplication.restclient.dto.HotelCreateDto;
+import sk.hotelclientapplication.restclient.dto.TokenRequestDto;
+import sk.hotelclientapplication.restclient.dto.TokenResponseDto;
 
 import java.io.IOException;
 
@@ -15,6 +18,29 @@ public class ReservationServiceRestClient{
 
     OkHttpClient client = new OkHttpClient();
     ObjectMapper objectMapper = new ObjectMapper();
+
+
+    public String saveHotel(HotelCreateDto hotelCreateDto) throws IOException{
+
+
+
+        RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(hotelCreateDto));
+
+        Request request = new Request.Builder()
+                .url(URL + "/hotel")
+                .post(body)
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        if (response.code() == 201) {
+            System.out.println("napravio hotel");
+        }
+
+        throw new RuntimeException("Hotel not created");
+    }
 
 //    public MovieListDto getMovies() throws IOException {
 //
