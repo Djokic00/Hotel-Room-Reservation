@@ -8,6 +8,15 @@ public class UserDto {
     private String lastName;
     private String username;
     private String verificationCode;
+    private String sendTo;
+
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
+    }
 
     public String getVerificationCode() {
         return verificationCode;

@@ -48,6 +48,13 @@ public class NotificationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Notification History")
+    @GetMapping("/{email}/notificationHistory")
+    public ResponseEntity<?> updateNotification(@PathVariable("email") String email) {
+        notificationService.notificationHistory(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 }

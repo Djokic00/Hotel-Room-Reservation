@@ -13,4 +13,8 @@ public interface NotificationHistoryRepository extends JpaRepository<Notificatio
     @Query(value = "select * from notification_history where notification_name = 'registration' and " +
             "datediff(day,cast( getdate() as Date ), arrival) <=2 and flag = 0", nativeQuery = true)
     List<NotificationHistory> findNotificationReservationHistory();
+
+    @Query(value = "select * from notification_history where email = ?", nativeQuery = true)
+    List<NotificationHistory> findNotificationMessageByEmail(String email);
+    List<NotificationHistory> findNotificationHistoryByEmail(String email);
 }

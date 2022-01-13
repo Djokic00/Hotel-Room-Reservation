@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService {
     private JmsTemplate jmsTemplate;
     private MessageHelper messageHelper;
     private String clientRegisterDestination;
-    private String managerRegistrationDestination;
     private String findEmailDestination;
     private String resetPasswordDestination;
 
@@ -46,8 +45,7 @@ public class UserServiceImpl implements UserService {
                            ClientStatusRepository clientStatusRepository,
                            JmsTemplate jmsTemplate,@Value("${destination.registerClient}") String clientRegisterDestination,
                            @Value("${destination.findEmail}") String findEmailDestination, MessageHelper messageHelper,
-                           @Value("${destination.resetPassword}") String resetPasswordDestination,
-                           @Value("${destination.registerManager}") String managerRegistrationDestination) {
+                           @Value("${destination.resetPassword}") String resetPasswordDestination) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.tokenService = tokenService;
@@ -59,7 +57,6 @@ public class UserServiceImpl implements UserService {
         this.findEmailDestination = findEmailDestination;
         this.messageHelper = messageHelper;
         this.resetPasswordDestination = resetPasswordDestination;
-        this.managerRegistrationDestination = managerRegistrationDestination;
     }
 
     @Override
@@ -110,7 +107,7 @@ public class UserServiceImpl implements UserService {
             claims.put("id", user.getId());
             claims.put("role", user.getRole().getName());
 
-            //Generate token
+            // Generate token
             return new TokenResponseDto(tokenService.generate(claims));
         } else return new TokenResponseDto();
 
@@ -196,18 +193,11 @@ public class UserServiceImpl implements UserService {
     public Boolean verify(String token) {
         User user = userRepository.findUserByVerificationCode(token)
                 .orElseThrow(() -> new NotFoundException("not found"));
-        //Set values to product
-
+        if (user == null) return false;
         user.setEnabled(true);
         user.setVerificationCode(null);
-
-        //Map product to DTO and return it
-        UserDto userDto = userMapper.userToUserDto(userRepository.save(user));
-
-        // OVO TREBA PROMENITI
-        if(!userDto.equals(null)){
-            return true;
-        } else return false;
+        userRepository.save(user);
+        return true;
     }
 
 
@@ -228,15 +218,15 @@ public class UserServiceImpl implements UserService {
         //return new ClientStatusDto(0, "regular"); // ovo stoji ako hocemo retry da probamo
     }
 
-//    @Override
-//    public ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto) {
-//        ClientStatus clientStatus = clientStatusRepository.getById(id);
-//        clientStatus.setRank(clientStatusCreateDto.getRank());
-//        clientStatus.setDiscount(clientStatusCreateDto.getDiscount());
-//        clientStatus.setMinNumberOfReservations(clientStatusCreateDto.getMinNumberOfReservations());
-//        clientStatus.setMaxNumberOfReservations(clientStatusCreateDto.getMaxNumberOfReservations());
-//        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
-//    }
+    @Override
+    public ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto) {
+        ClientStatus clientStatus = clientStatusRepository.getById(id);
+        clientStatus.setRank(clientStatusCreateDto.getRank());
+        clientStatus.setDiscount(clientStatusCreateDto.getDiscount());
+        clientStatus.setMinNumberOfReservations(clientStatusCreateDto.getMinNumberOfReservations());
+        clientStatus.setMaxNumberOfReservations(clientStatusCreateDto.getMaxNumberOfReservations());
+        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
+    }
 
     @Override
     public void changeNumberOfReservations(ClientQueueDto clientQueueDto) {
@@ -264,12 +254,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
-//    @Override
-//    public ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto) {
-//        ClientStatus clientStatus = clientStatusRepository.getById(id);
-//        clientStatus.setRank(discountCreateDto.getRank());
-//        clientStatus.setDiscount(discountCreateDto.getDiscount());
-//        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
-//    }
+    @Override
+    public ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto) {
+        ClientStatus clientStatus = clientStatusRepository.getById(id);
+        clientStatus.setRank(discountCreateDto.getRank());
+        clientStatus.setDiscount(discountCreateDto.getDiscount());
+        return userMapper.clientStatusToClientStatusDto(clientStatusRepository.save(clientStatus));
+    }
 
 }

@@ -13,6 +13,7 @@ import sk.hotelnotificationservice.service.EmailService;
 import sk.hotelnotificationservice.service.NotificationService;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -84,7 +85,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         emailService.sendSimpleMessage(userDto.getEmail(), notificationName, content);
 
-        NotificationHistory notificationHistory = new NotificationHistory(userDto.getEmail(), content, notificationName);
+        NotificationHistory notificationHistory = new NotificationHistory(userDto.getEmail(), content, notificationName, userDto.getSendTo());
         notificationHistoryRepository.save(notificationHistory);
     }
 
@@ -113,8 +114,9 @@ public class NotificationServiceImpl implements NotificationService {
         notificationHistory.setArrival(bookingClientDto.getArrival());
         notificationHistory.setNotificationName(notificationName);
         notificationHistory.setMessage(content);
+        notificationHistory.setSendTo("client");
 
-        if (notificationName.equals("cancel reservation")) notificationHistory.setFlag(1);
+        if (notificationName.equals("cancelReservation")) notificationHistory.setFlag(1);
         else notificationHistory.setFlag(0);
         notificationHistoryRepository.save(notificationHistory);
 
@@ -123,6 +125,7 @@ public class NotificationServiceImpl implements NotificationService {
         notificationHistoryManager.setNotificationName(notificationName);
         notificationHistoryManager.setMessage(managerContent);
         notificationHistoryManager.setFlag(1);
+        notificationHistoryManager.setSendTo("manager");
 
         notificationHistoryRepository.save(notificationHistoryManager);
 
@@ -152,7 +155,20 @@ public class NotificationServiceImpl implements NotificationService {
         content = content.replace("%username", userDto.getUsername());
         content = content.replace("%email", userDto.getEmail());
         emailService.sendSimpleMessage(userDto.getEmail(), notificationName, content);
-        NotificationHistory notificationHistory = new NotificationHistory(userDto.getEmail(), content, notificationName);
+        NotificationHistory notificationHistory = new NotificationHistory(userDto.getEmail(), content, notificationName, userDto.getSendTo());
         notificationHistoryRepository.save(notificationHistory);
     }
+
+    @Override
+    public void notificationHistory(String email) {
+//        List<NotificationHistory> notificationHistory = notificationHistoryRepository.findNotificationMessageByEmail(email);
+        List<NotificationHistory> notificationHistory = notificationHistoryRepository.findNotificationHistoryByEmail(email);
+        for (NotificationHistory history : notificationHistory) {
+            System.out.println(history.getMessage());
+        }
+    }
 }
+
+
+//    @Query(value = "select avg(hotel_rating) from comment where hotel_id = ?", nativeQuery = true)
+//    String findAverageRatingByHotelId(String hotelId);

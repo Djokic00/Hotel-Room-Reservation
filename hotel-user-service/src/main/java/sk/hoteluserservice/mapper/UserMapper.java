@@ -41,7 +41,7 @@ public class UserMapper {
         clientDto.setNumberOfReservations(client.getNumberOfReservations());
         clientDto.setEnabled(client.isEnabled());
         clientDto.setVerificationCode(client.getVerificationCode());
-
+        clientDto.setSendTo("client");
         return clientDto;
     }
 
@@ -56,11 +56,11 @@ public class UserMapper {
         client.setContact(clientCreateDto.getContact());
         client.setPassportNumber(clientCreateDto.getPassportNumber());
         client.setRole(roleRepository.findRoleByName("ROLE_CLIENT").get());
-        client.setNumberOfReservations(0);
+        client.setNumberOfReservations(8);
         client.setBanned(false);
         String randomCode = RandomString.make(64);
         client.setVerificationCode(randomCode);
-        client.setEnabled(false);
+        client.setEnabled(true);
         return client;
     }
 
@@ -81,8 +81,9 @@ public class UserMapper {
         managerDto.setFirstName(manager.getFirstName());
         managerDto.setUsername(manager.getUsername());
         managerDto.setLastName(manager.getLastName());
-        managerDto.getHotelName(manager.getHotelName());
-
+        managerDto.setHotelName(manager.getHotelName());
+        managerDto.setVerificationCode(manager.getVerificationCode());
+        managerDto.setSendTo("manager");
         return managerDto;
     }
 
@@ -102,7 +103,7 @@ public class UserMapper {
         manager.setBanned(false);
         String randomCode = RandomString.make(64);
         manager.setVerificationCode(randomCode);
-        manager.setEnabled(false);
+        manager.setEnabled(true);
         return manager;
     }
 

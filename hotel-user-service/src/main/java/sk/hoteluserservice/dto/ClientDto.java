@@ -15,6 +15,15 @@ public class ClientDto {
     private Integer numberOfReservations;
     private String verificationCode;
     private boolean enabled;
+    private String sendTo;
+
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
+    }
 
     public Long getId() {
         return id;

@@ -128,10 +128,15 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public BookingDto removeBooking(BookingCreateDto bookingCreateDto, Long bookingId) {
         Booking booking = reservationMapper.bookingCreateDtoToBooking(bookingCreateDto);
-//        ClientBookingDto clientBookingDto = new ClientBookingDto(booking.getUsername());
-//        clientBookingDto.setIncrement(false);
-//        clientBookingDto.setBookingId(bookingId);
-//        jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientBookingDto));
+
+
+        ClientQueueDto clientQueueDto = new ClientQueueDto();
+        clientQueueDto.setIncrement(false);
+        clientQueueDto.setUserId(bookingCreateDto.getUserId());
+        clientQueueDto.setBookingId(bookingId);
+        clientQueueDto.setHotelName(bookingCreateDto.getHotelName());
+        clientQueueDto.setCity(bookingCreateDto.getCity());
+        jmsTemplate.convertAndSend(bookingDestination, messageHelper.createTextMessage(clientQueueDto));
         return reservationMapper.bookingToBookingDto(booking);
     }
 

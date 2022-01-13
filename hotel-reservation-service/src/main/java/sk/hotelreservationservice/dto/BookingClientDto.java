@@ -20,7 +20,6 @@ public class BookingClientDto {
     private String city;
     private String managerEmail;
     private String managerId;
-
     private Boolean increment;
 
     public Long getUserId() {

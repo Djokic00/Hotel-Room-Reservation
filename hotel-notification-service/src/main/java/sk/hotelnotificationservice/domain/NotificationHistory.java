@@ -14,16 +14,27 @@ public class NotificationHistory {
     private String notificationName;
     private Date arrival;
     private Integer flag;
+    private String sendTo;
 
-
-    public NotificationHistory(String email, String message, String notificationName) {
+    public NotificationHistory(String email, String message, String notificationName, String sendTo) {
         this.email = email;
         this.message = message;
         this.notificationName = notificationName;
+        this.sendTo = sendTo;
 
     }
 
     public NotificationHistory() {
+    }
+
+
+
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
     }
 
     public String getNotificationName() {

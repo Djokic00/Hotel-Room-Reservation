@@ -20,6 +20,7 @@ public class BookingClientDto {
     private Boolean increment;
     private String managerEmail;
 
+
     public String getManagerEmail() {
         return managerEmail;
     }

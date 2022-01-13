@@ -12,8 +12,25 @@ public class ManagerDto {
     private String contact;
     private String hotelName;
     private String city;
+    private String verificationCode;
+    private String sendTo;
     // datum zaposljavanja
 
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
 
     public Long getId() {
         return id;

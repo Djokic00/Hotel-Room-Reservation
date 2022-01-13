@@ -10,9 +10,8 @@ public interface NotificationService {
     void deleteNotificationById(Long id);
     NotificationDto updateNotification(Long id, NotificationCreateDto notificationCreateDto);
     void sendVerificationMail(UserDto userDto, String notificationName);
-    //void sendRegistrationClientMail(ClientDto clientDto, String notificationName);
-    //void sendRegistrationManagerMail(ManagerDto managerDto, String notificationName);
     void sendReservationMail(BookingClientDto bookingClientDto, String notificationName);
     void sendReservationReminder(NotificationHistory notificationHistory);
     void sendResetPasswordMail(UserDto userDto, String notificationName);
+    void notificationHistory(String email);
 }

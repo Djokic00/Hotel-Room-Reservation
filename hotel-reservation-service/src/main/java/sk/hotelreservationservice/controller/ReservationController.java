@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.hotelreservationservice.dto.*;
+import sk.hotelreservationservice.repository.CommentRepository;
 import sk.hotelreservationservice.service.ReservationService;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -21,9 +22,11 @@ import java.util.List;
 public class ReservationController {
 
     private ReservationService reservationService;
+    private CommentRepository commentRepository;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, CommentRepository commentRepository) {
         this.reservationService = reservationService;
+        this.commentRepository = commentRepository;
     }
 
     @ApiOperation(value = "Add hotel")
@@ -75,7 +78,7 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.findAllByHotelId(id, pageable), HttpStatus.OK);
     }
     @ApiOperation(value = "Add comment")
-    @PostMapping("/comment/add")
+    @PostMapping("/{id}/comment")
     public ResponseEntity<CommentDto> add(@PathVariable("id") Long id, @RequestBody @Valid CommentCreateDto commentCreateDto) {
         return new ResponseEntity<>(reservationService.addCommentOnHotel(id, commentCreateDto), HttpStatus.OK);
     }
@@ -103,6 +106,12 @@ public class ReservationController {
         } );
 
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Average rating")
+    @GetMapping("/{id}/rating")
+    public ResponseEntity<?> avgRating(@PathVariable("id") Long hotelId) {
+        return new ResponseEntity<>(commentRepository.findAverageRatingByHotelId(hotelId), HttpStatus.CREATED);
     }
 
 

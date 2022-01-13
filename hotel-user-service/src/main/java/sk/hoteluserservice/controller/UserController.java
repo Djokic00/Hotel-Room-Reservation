@@ -84,7 +84,7 @@ public class UserController {
     public ResponseEntity<UserDto> registerManager(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
         userService.addManager(managerCreateDto);
         userService.registerManager(managerCreateDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Register client with notification")
