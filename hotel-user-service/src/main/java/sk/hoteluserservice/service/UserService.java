@@ -11,6 +11,7 @@ public interface UserService {
     UserDto addManager(ManagerCreateDto managerCreateDto);
     UserDto addClient(ClientCreateDto clientCreateDto);
     void registerClient(ClientCreateDto clientCreateDto);
+    void registerManager(ManagerCreateDto managerCreateDto);
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
     ClientDto update(Long id, ClientCreateDto clientCreateDto);
     ClientDto updatePassportNumber(Long id, PassportClientDto passportClientDto);
@@ -22,8 +23,5 @@ public interface UserService {
     ClientStatusDto findDiscount(Long id);
     ClientStatusDto updateDiscount(Long id, DiscountCreateDto discountCreateDto);
     ClientStatusDto updateRankingSystem(Long id, ClientStatusCreateDto clientStatusCreateDto);
-    void changeNumberOfReservations(ClientQueueDto clientQueueDto);
-//    ovo je pisalo pre nego sto sam ja poceo da jedem govna
-//    void changeNumberOfReservations(ClientBookingDto clientBookingDto);
-    void resetPassword(String username);
+    void changeNumberOfReservations(ClientQueueDto clientQueueDto);;
 }

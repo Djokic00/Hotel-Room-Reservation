@@ -32,7 +32,6 @@ public class UserMapper {
 
     public ClientDto clientToClientDto(Client client) {
         ClientDto clientDto = new ClientDto();
-       // clientDto.setBirthday(client.getBirthday());
         clientDto.setContact(client.getContact());
         clientDto.setEmail(client.getEmail());
         clientDto.setFirstName(client.getFirstName());
@@ -98,7 +97,7 @@ public class UserMapper {
         manager.setContact(managerCreateDto.getContact());
         manager.setHotelName(managerCreateDto.getHotelName());
         manager.setCity(managerCreateDto.getCity());
-//        manager.setHiringDate(managerCreateDto.getHiringDate());
+       // manager.setHiringDate(managerCreateDto.getHiringDate());
         manager.setRole(roleRepository.findRoleByName("ROLE_MANAGER").get());
         manager.setBanned(false);
         String randomCode = RandomString.make(64);

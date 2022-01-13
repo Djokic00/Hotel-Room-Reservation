@@ -53,25 +53,39 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
 
+//    @Override
+//    public void sendMail(ClientDto clientDto, String notificationName) {
+//        Notification notification = notificationRepository.findNotificationByName(notificationName);
+//        String content = notification.getMessage();
+//
+//        content = content.replace("%firstname", clientDto.getFirstName());
+//        content = content.replace("%lastname", clientDto.getLastName());
+//        content = content.replace("%username", clientDto.getUsername());
+//        content = content.replace("%email", clientDto.getEmail());
+////        content = content.replace("%firstname", clientDto.getFirstName());
+////        content = content.replace("%lastname", clientDto.getLastName());
+//        String verifyURL = "http://localhost:8081/verify?token=" + clientDto.getVerificationCode();
+//        content = content.replace("%link", verifyURL);
+//
+//        emailService.sendSimpleMessage(clientDto.getEmail(), notificationName, content);
+//
+//        NotificationHistory notificationHistory = new NotificationHistory(clientDto.getEmail(), content, notificationName);
+//        notificationHistoryRepository.save(notificationHistory);
+//
+//    }
+
     @Override
-    public void sendMail(ClientDto clientDto, String notificationName) {
+    public void sendVerificationMail(UserDto userDto, String notificationName) {
         Notification notification = notificationRepository.findNotificationByName(notificationName);
         String content = notification.getMessage();
 
-        content = content.replace("%firstname", clientDto.getFirstName());
-        content = content.replace("%lastname", clientDto.getLastName());
-        content = content.replace("%username", clientDto.getUsername());
-        content = content.replace("%email", clientDto.getEmail());
-//        content = content.replace("%firstname", clientDto.getFirstName());
-//        content = content.replace("%lastname", clientDto.getLastName());
-        String verifyURL = "http://localhost:8081/verify?token=" + clientDto.getVerificationCode();
+        String verifyURL = "http://localhost:8081/verify?token=" + userDto.getVerificationCode();
         content = content.replace("%link", verifyURL);
 
-        emailService.sendSimpleMessage(clientDto.getEmail(), notificationName, content);
+        emailService.sendSimpleMessage(userDto.getEmail(), notificationName, content);
 
-        NotificationHistory notificationHistory = new NotificationHistory(clientDto.getEmail(), content, notificationName);
+        NotificationHistory notificationHistory = new NotificationHistory(userDto.getEmail(), content, notificationName);
         notificationHistoryRepository.save(notificationHistory);
-
     }
 
     @Override
@@ -83,13 +97,12 @@ public class NotificationServiceImpl implements NotificationService {
         content = content.replace("%firstname", bookingClientDto.getFirstName());
         content = content.replace("%lastname", bookingClientDto.getLastName());
         content = content.replace("%email", bookingClientDto.getEmail());
-        //content = content.replace((CharSequence) "%arrival", (CharSequence) bookingClientDto.getArrival());
-        //content = content.replace((CharSequence) "%departure", (CharSequence) bookingClientDto.getDeparture());
+        content = content.replace("%arrival", bookingClientDto.getArrival().toString());
+        content = content.replace("%departure", bookingClientDto.getDeparture().toString());
         content = content.replace("%city", bookingClientDto.getCity());
         content = content.replace("%hotelname", bookingClientDto.getHotelName());
         content = content.replace("%roomtype", bookingClientDto.getRoomType());
         content = content.replace("%email", bookingClientDto.getEmail());
-        //content = content.replace((CharSequence) "%birthday", (CharSequence) bookingClientDto.getBirthday());
         managerContent = managerContent.replace("%userId", String.valueOf(bookingClientDto.getUserId()));
 
         emailService.sendSimpleMessage(bookingClientDto.getEmail(), notificationName, content);
@@ -115,20 +128,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
-    @Override
-    public void sendReservationMailManager(BookingClientDto bookingClientDto, String notificationName) {
-//        Notification notification = notificationRepository.findNotificationByName(notificationName);
-//        String content = notification.getMessage();
-//        content = content.replace("%userId", String.valueOf(bookingClientDto.getUserId()));
-//
-//        NotificationHistory notificationHistory = new NotificationHistory();
-//        notificationHistory.setEmail(bookingClientDto.getManagerEmail());
-//        notificationHistory.setNotificationName(notificationName);
-//        notificationHistory.setMessage(content);
-//        if (notificationName.equals("cancel reservation manager")) notificationHistory.setFlag(1);
-//        else notificationHistory.setFlag(0);
-//        notificationHistoryRepository.save(notificationHistory);
-    }
 
     @Override
     public void sendReservationReminder(NotificationHistory notificationHistory) {
@@ -147,13 +146,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void sendResetPasswordMail(ClientDto clientDto, String notificationName) {
+    public void sendResetPasswordMail(UserDto userDto, String notificationName) {
         Notification notification = notificationRepository.findNotificationByName(notificationName);
         String content = notification.getMessage();
-        content = content.replace("%username", clientDto.getUsername());
-        content = content.replace("%email", clientDto.getEmail());
-        emailService.sendSimpleMessage(clientDto.getEmail(), notificationName, content);
-        NotificationHistory notificationHistory = new NotificationHistory(clientDto.getEmail(), content, notificationName);
+        content = content.replace("%username", userDto.getUsername());
+        content = content.replace("%email", userDto.getEmail());
+        emailService.sendSimpleMessage(userDto.getEmail(), notificationName, content);
+        NotificationHistory notificationHistory = new NotificationHistory(userDto.getEmail(), content, notificationName);
         notificationHistoryRepository.save(notificationHistory);
     }
 }
