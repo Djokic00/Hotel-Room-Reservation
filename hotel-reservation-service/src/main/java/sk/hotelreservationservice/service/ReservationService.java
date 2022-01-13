@@ -17,5 +17,6 @@ public interface ReservationService {
     void forwardClientAndBooking(ClientQueueDto clientQueueDto);
 
     Page<CommentDto> findAllByHotelId(Long hotelId, Pageable pageable);
+    Page<RoomsDto> findAll(Pageable pageable);
     CommentDto addCommentOnHotel(Long hotelId, CommentCreateDto commentCreateDto);
 }

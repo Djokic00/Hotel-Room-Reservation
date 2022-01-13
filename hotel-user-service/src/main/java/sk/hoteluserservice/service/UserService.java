@@ -27,6 +27,6 @@ public interface UserService {
     void changeNumberOfReservations(ClientQueueDto clientQueueDto);
 //    ovo je pisalo pre nego sto sam ja poceo da jedem govna
 //    void changeNumberOfReservations(ClientBookingDto clientBookingDto);
-    void resetPassword(String username);
+//    void resetPassword(String username);
 
 }

@@ -92,6 +92,8 @@ public class ReservationMapper {
         return commentDto;
     }
 
+
+
     public Comment commentCreateDtoToComment(CommentCreateDto commentCreateDto, Hotel hotel) {
         Comment comment = new Comment();
         comment.setText(commentCreateDto.getText());

@@ -92,9 +92,6 @@ public class LoginView extends JPanel {
             ClientApplication.getInstance().hide();
         });
 
-
-
-
     }
 
     private void initInputPanel() {

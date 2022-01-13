@@ -2,10 +2,12 @@ package sk.hotelclientapplication.restclient.dto;
 
 public class HotelCreateDto {
 
-    private String hotelName;
-    private String description;
-    private Integer numberOfRooms;
     private String city;
+    private String description;
+    private String hotelName;
+
+    private Integer numberOfRooms;
+
 
     public String getHotelName() {
         return hotelName;

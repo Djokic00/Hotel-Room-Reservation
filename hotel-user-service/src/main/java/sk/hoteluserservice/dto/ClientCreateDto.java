@@ -89,4 +89,18 @@ public class ClientCreateDto {
     public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
     }
+
+    @Override
+    public String toString() {
+        return "ClientCreateDto{" +
+                "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", birthday=" + birthday +
+                ", contact='" + contact + '\'' +
+                ", passportNumber='" + passportNumber + '\'' +
+                '}';
+    }
 }

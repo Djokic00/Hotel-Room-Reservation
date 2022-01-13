@@ -18,6 +18,7 @@ import sk.hoteluserservice.mapper.UserMapper;
 import sk.hoteluserservice.repository.UserRepository;
 import sk.hoteluserservice.security.CheckSecurity;
 import sk.hoteluserservice.service.UserService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -60,7 +61,7 @@ public class UserController {
     @GetMapping("/all")
     @CheckSecurity(roles = {"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_CLIENT"})
     public ResponseEntity<Page<UserDto>> getAllUsers(@RequestHeader("Authorization") String authorization,
-                                                     Pageable pageable) {
+                                                     @ApiIgnore Pageable pageable) {
 
         return new ResponseEntity<>(userService.findAll(pageable), HttpStatus.OK);
     }
@@ -89,9 +90,10 @@ public class UserController {
     @ApiOperation(value = "Register client with notification")
     @PostMapping("/registration/activemq")
     public ResponseEntity<Void> registerClient(@RequestBody @Valid ClientCreateDto clientCreateDto) {
+        System.out.println(clientCreateDto.toString());
         userService.addClient(clientCreateDto);
         userService.registerClient(clientCreateDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Login")
@@ -141,6 +143,7 @@ public class UserController {
                                                     @RequestBody @Valid BanUserDto banUserDto) {
         return new ResponseEntity<>(userService.banUser(id, banUserDto), HttpStatus.OK);
     }
+
     @ApiOperation(value = "Unban user")
     @PutMapping("/{id}/unban")
     //@CheckSecurity(roles = {"ROLE_ADMIN"})

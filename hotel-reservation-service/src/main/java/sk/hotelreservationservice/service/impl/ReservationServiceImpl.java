@@ -180,6 +180,12 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public Page<RoomsDto> findAll(Pageable pageable) {
+        return roomsRepository.findAll(pageable)
+                .map(reservationMapper::roomsToRoomsDto);
+    }
+
+    @Override
     public CommentDto addCommentOnHotel(Long hotelId, CommentCreateDto commentCreateDto) {
         Hotel hotel = hotelRepository.findHotelById(hotelId);
         Comment comment = commentRepository

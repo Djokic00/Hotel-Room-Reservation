@@ -5,14 +5,16 @@ import javax.validation.constraints.NotNull;
 
 public class HotelCreateDto {
 
-    @NotBlank
-    private String hotelName;
-    @NotBlank
-    private String description;
-    @NotNull
-    private Integer numberOfRooms;
+
     @NotBlank
     private String city;
+    @NotBlank
+    private String description;
+    @NotBlank
+    private String hotelName;
+
+    @NotNull
+    private Integer numberOfRooms;
 
     public String getHotelName() {
         return hotelName;
@@ -44,5 +46,15 @@ public class HotelCreateDto {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return "HotelCreateDto{" +
+                "city='" + city + '\'' +
+                ", description='" + description + '\'' +
+                ", hotelName='" + hotelName + '\'' +
+                ", numberOfRooms=" + numberOfRooms +
+                '}';
     }
 }

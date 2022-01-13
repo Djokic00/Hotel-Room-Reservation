@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class  ClientCreateDto {
 
-    private Date birthday;
+    private String birthday;
     private String contact;
     private String email;
     private String firstName;
@@ -63,11 +63,11 @@ public class  ClientCreateDto {
         this.password = password;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

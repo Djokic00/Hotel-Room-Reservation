@@ -98,10 +98,12 @@ public class RegisterClientView extends JFrame {
                 clientCreateDto.setFirstName(firstnameInput.getText());
                 clientCreateDto.setLastName(lastnameInput.getText());
                 clientCreateDto.setPassword(String.valueOf(passwordInput.getPassword()));
-                clientCreateDto.setBirthday(Date.valueOf(birthdayInput.getText()));
+                clientCreateDto.setBirthday(birthdayInput.getText());
                 clientCreateDto.setUsername(usernameInput.getText());
                 clientCreateDto.setPassportNumber(passportInput.getText());
                 clientCreateDto.setContact(contactInput.getText());
+
+
                 userServiceRestClient.registerClient(clientCreateDto);
             } catch (IOException e) {
                 e.printStackTrace();

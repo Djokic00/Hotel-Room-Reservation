@@ -42,11 +42,15 @@ public class ClientView extends  JFrame{
 
         jTabbedPane.addTab("Detalji" , detailsView);
 
-        jPanelSecond.setLayout(null);
-        jTabbedPane.addTab("tab2", jPanelSecond);
+        HotelsView hotelsView = new HotelsView();
 
+        jPanelSecond.setLayout(null);
+        jTabbedPane.addTab("tab2", hotelsView);
+
+
+        MakeReservationView makeReservationView= new MakeReservationView();
         jPanelThird.setLayout(null);
-        jTabbedPane.addTab("tab3", jPanelThird);
+        jTabbedPane.addTab("tab3", makeReservationView);
 
 
         GroupLayout layout = new GroupLayout(getContentPane());

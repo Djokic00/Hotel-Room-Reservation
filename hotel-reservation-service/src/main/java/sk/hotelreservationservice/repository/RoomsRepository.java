@@ -6,13 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import sk.hotelreservationservice.domain.Rooms;
 
+import java.awt.print.Pageable;
 import java.sql.Date;
+import java.util.List;
 
 @Repository
 public interface RoomsRepository extends JpaRepository<Rooms, Long> {
 
     Rooms findRoomsByType(String type);
-//    @Query(
+
+    @Query(value = "select * from rooms where rooms.hotel_name = ?", nativeQuery = true)
+    List<Rooms> findAllByHotel(String hotel);
+    //    @Query(
 //            value = "SELECT * FROM Users u WHERE u.status = ?1",
 //            nativeQuery = true)
 //    Rooms findAvailableRooms();

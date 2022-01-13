@@ -35,11 +35,11 @@ public class DetailsView extends JPanel {
 
         this.setVisible(true);
 
-//        UserListDto userListDto = userServiceRestClient.getAllUsers();
-//        userListDto.getContent().forEach(userDto -> {
-//            System.out.println(userDto);
-//            userTableModel.addRow(new Object[]{userDto.getUsername(), userDto.getEmail(), userDto.getId()});
-//        });
+        UserListDto userListDto = userServiceRestClient.getAllUsers();
+        userListDto.getContent().forEach(userDto -> {
+            System.out.println(userDto);
+            userTableModel.addRow(new Object[]{userDto.getUsername(), userDto.getEmail(), userDto.getId()});
+        });
 
 
     }
